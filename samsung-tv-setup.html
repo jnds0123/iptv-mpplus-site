@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samsung TV Setup — IPTV Multimedia Player Plus</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+         max-width: 720px; margin: 2rem auto; padding: 0 1.25rem; line-height: 1.6; color: #1c1c28; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.15rem; margin-top: 2rem; }
+  code { background: rgba(127,127,127,.15); padding: .1rem .35rem; border-radius: 4px; }
+  ol li, ul li { margin: .35rem 0; }
+  .note { border-left: 3px solid #b9a9ff; padding: .5rem .9rem; background: rgba(185,169,255,.08); }
+  @media (prefers-color-scheme: dark) { body { background: #0b0b12; color: #e8e6f0; } a { color: #b9a9ff; } }
+</style>
+</head>
+<body>
+<h1>Samsung TV Setup — IPTV Multimedia Player Plus</h1>
+
+<p>This guide walks through installing IPTV MP+ on a Samsung Smart TV (Tizen,
+2016 or newer) and adding your provider. The examples below use the TV IP
+address <code>10.0.4.209</code> — replace it with your own TV's IP if it differs.</p>
+
+<h2>1. Give the TV a fixed IP address</h2>
+<ol>
+  <li>On the TV, open <strong>Settings → General → Network → Network Status → IP Settings</strong>.</li>
+  <li>Set <strong>IP Setting</strong> to <em>Enter manually</em> and enter the address
+      (e.g. <code>10.0.4.209</code>), subnet mask <code>255.255.255.0</code>, and your
+      router's gateway and DNS.</li>
+  <li>Confirm the TV shows "Connected to the Internet".</li>
+</ol>
+
+<h2>2. Enable Developer Mode on the TV</h2>
+<ol>
+  <li>Open the <strong>Apps</strong> panel on the TV.</li>
+  <li>On the remote, press <strong>1 2 3 4 5</strong> (on older models: enter
+      <code>12345</code> in the search box). The Developer Mode dialog appears.</li>
+  <li>Switch <strong>Developer Mode</strong> to <em>On</em>.</li>
+  <li>In <strong>Host PC IP</strong>, enter the IP address of the <em>computer</em> you
+      will install from (not the TV's own IP).</li>
+  <li>Restart the TV (hold the power button until it reboots).</li>
+</ol>
+
+<h2>3. Install IPTV MP+ from your computer</h2>
+<p>You need <a href="https://developer.tizen.org/development/tizen-studio/download">Tizen Studio</a>
+(with the TV extension) and a Samsung certificate profile.</p>
+<ol>
+  <li>Open <strong>Device Manager</strong> in Tizen Studio and connect to the TV:
+      <code>10.0.4.209</code>, port <code>26101</code> — or from a terminal:
+      <code>sdb connect 10.0.4.209</code>.</li>
+  <li>In the Certificate Manager, create a <strong>Samsung certificate</strong> and add
+      your TV's DUID (Device Manager shows it once connected).</li>
+  <li>Install the signed package:
+      <code>tizen install -n IPTVMPPlus.wgt -t &lt;device&gt;</code>
+      (or right-click the project → <em>Run As → Tizen Web Application</em>).</li>
+  <li>IPTV MP+ now appears in the TV's Apps panel.</li>
+</ol>
+
+<h2>4. Add your provider in the app</h2>
+<ol>
+  <li>Open IPTV MP+ on the TV.</li>
+  <li>Choose <strong>Add Playlist</strong> and pick the type your provider gave you:
+      <ul>
+        <li><strong>Xtream Codes login</strong> — server address (e.g. your provider's
+            portal such as <code>orpheusnations.com</code> with the port they specify),
+            plus your username and password.</li>
+        <li><strong>M3U / M3U8 URL</strong> — paste the full playlist link.</li>
+      </ul>
+  </li>
+  <li>Optionally add the XMLTV EPG URL from your provider for the program guide.</li>
+  <li>Save — channels, movies, and series load and are cached on the TV.</li>
+</ol>
+
+<div class="note">
+<p><strong>Note:</strong> IPTV MP+ ships with no content or providers. Add only playlists
+and subscriptions you are legally entitled to access — see our
+<a href="privacy-policy.html">privacy policy</a>.</p>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+  <li><strong>Device Manager can't connect:</strong> the TV and computer must be on the
+      same network; re-check that Developer Mode shows <em>On</em> and the Host PC IP
+      matches your computer, then restart the TV.</li>
+  <li><strong>"Non trusted certificate" on install:</strong> the certificate profile is
+      missing the TV's DUID — regenerate it with the DUID included.</li>
+  <li><strong>Developer Mode apps disappear:</strong> sideloaded apps are removed if the
+      TV leaves Developer Mode or after some firmware updates; reinstall from step 3.</li>
+  <li><strong>Channels won't load:</strong> verify the portal address, port, and
+      credentials with your provider, and test the same login in the app on another
+      device.</li>
+</ul>
+
+<h2>Contact</h2>
+<p>Questions: <a href="mailto:jaime.mallari@gmail.com">jaime.mallari@gmail.com</a></p>
+</body>
+</html>
