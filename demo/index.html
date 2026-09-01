@@ -1,0 +1,618 @@
+<title>Orpheus Property Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
+<style>
+/* ---------- tokens: page chrome (theme-aware) ---------- */
+:root{
+  --bg:#F7F8FA; --bg-2:#EDEFF4; --panel:#FFFFFF; --panel-2:#F4F6F9;
+  --line:#DFE4EC; --line-2:#C9D1DE;
+  --ink:#101725; --ink-2:#4A5568; --ink-3:#7C879B;
+  --accent:#8A6A14; --accent-soft:#F5EEDC;
+  --ok:#1F6B4E; --ok-soft:#E2F1EA;
+  --warn:#B4531B; --warn-soft:#FBEBE0;
+  --crit:#A8322C; --crit-soft:#F9E5E3;
+  --shadow:0 1px 2px rgba(16,23,37,.06), 0 8px 24px rgba(16,23,37,.06);
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A0E16; --bg-2:#070A11; --panel:#131A26; --panel-2:#0F1621;
+    --line:#232D3D; --line-2:#313E52;
+    --ink:#EBEEF4; --ink-2:#A3AEC0; --ink-3:#76829A;
+    --accent:#D8B25A; --accent-soft:#231C0D;
+    --ok:#5FBF93; --ok-soft:#10241C;
+    --warn:#E08B4E; --warn-soft:#2A1A0F;
+    --crit:#E0716A; --crit-soft:#2A1312;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.32);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0E16; --bg-2:#070A11; --panel:#131A26; --panel-2:#0F1621;
+  --line:#232D3D; --line-2:#313E52;
+  --ink:#EBEEF4; --ink-2:#A3AEC0; --ink-3:#76829A;
+  --accent:#D8B25A; --accent-soft:#231C0D;
+  --ok:#5FBF93; --ok-soft:#10241C;
+  --warn:#E08B4E; --warn-soft:#2A1A0F;
+  --crit:#E0716A; --crit-soft:#2A1312;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.32);
+}
+/* ---------- tokens: the television (a screen — one fixed world) ---------- */
+:root{
+  --tv-ground:#070B12; --tv-panel:#111B2B; --tv-panel-2:#18253A;
+  --tv-line:#1F2E45; --tv-gold:#D8B25A; --tv-cream:#F2EEE4; --tv-muted:#8A9AB4;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0; text-wrap:balance}
+button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px; margin:0 auto; padding:22px 20px 56px}
+.masthead{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between; margin-bottom:18px}
+.brand h1{font-family:"Newsreader",Georgia,serif; font-size:27px; font-weight:600; letter-spacing:-.01em}
+.brand p{margin:4px 0 0; color:var(--ink-3); font-size:12.5px; max-width:60ch}
+.seg{display:inline-flex; background:var(--panel-2); border:1px solid var(--line); border-radius:9px; padding:3px; gap:3px}
+.seg button{padding:7px 14px; border-radius:6px; font-size:13px; font-weight:600; color:var(--ink-2); white-space:nowrap}
+.seg button[aria-selected="true"]{background:var(--panel); color:var(--ink); box-shadow:var(--shadow)}
+
+.hint{
+  display:flex; gap:10px; align-items:flex-start; margin-bottom:18px; padding:11px 14px;
+  background:var(--accent-soft); border:1px solid var(--line); border-radius:var(--radius);
+  font-size:12.5px; color:var(--ink-2);
+}
+.hint b{color:var(--ink)}
+.hint svg{flex:none; margin-top:1px; color:var(--accent)}
+
+/* ---------- television ---------- */
+.stage{display:grid; grid-template-columns:minmax(0,1fr) 232px; gap:20px; align-items:start}
+@media (max-width:900px){ .stage{grid-template-columns:1fr} }
+.bezel{
+  background:#05080D; border:1px solid var(--line); border-radius:14px; padding:11px;
+  box-shadow:var(--shadow);
+}
+.screen{
+  position:relative; aspect-ratio:16/9; background:var(--tv-ground); border-radius:7px;
+  overflow:hidden; color:var(--tv-cream); container-type:inline-size;
+}
+.screen-pad{position:absolute; inset:0; padding:3.1cqw 3.6cqw; display:flex; flex-direction:column}
+.tv-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:2.4cqw}
+.tv-hello{font-family:"Newsreader",Georgia,serif; font-size:3.5cqw; font-weight:500; line-height:1.15}
+.tv-sub{margin-top:.7cqw; font-size:1.45cqw; color:var(--tv-muted); letter-spacing:.01em}
+.tv-chip{
+  flex:none; background:var(--tv-gold); color:#1A1305; font-weight:700;
+  font-size:1.25cqw; padding:.6cqw 1.1cqw; border-radius:99px;
+}
+.tv-back{
+  font-size:1.35cqw; color:var(--tv-muted); display:inline-flex; align-items:center; gap:.5cqw;
+  padding:.5cqw .9cqw; border-radius:99px; border:1px solid var(--tv-line);
+}
+.tiles{display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr); gap:1.5cqw; height:100%}
+.tile{
+  background:var(--tv-panel); border:1px solid var(--tv-line); border-radius:.9cqw;
+  padding:1.6cqw; text-align:left; display:flex; flex-direction:column; justify-content:flex-end; gap:.45cqw;
+  transition:transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.tile b{font-size:2cqw; font-weight:600; letter-spacing:-.01em}
+.tile span{font-size:1.3cqw; color:var(--tv-muted); line-height:1.35}
+.tile svg{width:2.3cqw; height:2.3cqw; color:var(--tv-gold); margin-bottom:auto}
+.f{cursor:pointer}
+.f.on{
+  background:var(--tv-panel-2); border-color:var(--tv-gold);
+  box-shadow:0 0 0 .22cqw rgba(216,178,90,.28); transform:translateY(-.15cqw);
+}
+.tv-body{flex:1; min-height:0; overflow-y:auto; scrollbar-width:none; display:flex; flex-direction:column}
+.tv-body::-webkit-scrollbar{display:none}
+.rowlab{font-size:1.25cqw; text-transform:uppercase; letter-spacing:.14em; color:var(--tv-gold); margin:0 0 1cqw}
+.rail{display:grid; grid-template-columns:repeat(5,1fr); gap:1.1cqw; margin-bottom:1.8cqw}
+.art{
+  aspect-ratio:2/3; border-radius:.6cqw; border:1px solid var(--tv-line);
+  display:flex; align-items:flex-end; padding:.8cqw; font-size:1.15cqw; font-weight:600;
+  line-height:1.25; text-shadow:0 1px 6px rgba(0,0,0,.8);
+}
+.list{display:flex; flex-direction:column; gap:.85cqw}
+.li{
+  display:flex; align-items:center; gap:1.1cqw; padding:1.05cqw 1.3cqw;
+  background:var(--tv-panel); border:1px solid var(--tv-line); border-radius:.65cqw; text-align:left;
+}
+.li b{font-size:1.6cqw; font-weight:600}
+.li small{display:block; font-size:1.2cqw; color:var(--tv-muted); margin-top:.15cqw; font-weight:400}
+.li .amt{margin-left:auto; font-size:1.5cqw; color:var(--tv-gold); font-weight:600}
+.folio-row{display:flex; gap:1.1cqw; padding:.75cqw 0; border-bottom:1px solid var(--tv-line); font-size:1.4cqw}
+.folio-row .amt{margin-left:auto; color:var(--tv-cream)}
+.folio-row small{color:var(--tv-muted); font-size:1.15cqw}
+.folio-total{display:flex; margin-top:1.1cqw; font-size:2cqw; font-weight:600; color:var(--tv-gold)}
+.folio-total .amt{margin-left:auto}
+.toast{
+  position:absolute; left:50%; bottom:3cqw; transform:translate(-50%,140%);
+  background:var(--tv-gold); color:#1A1305; font-weight:600; font-size:1.5cqw;
+  padding:1cqw 1.8cqw; border-radius:99px; opacity:0; pointer-events:none;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2), opacity .2s ease;
+  max-width:80%; text-align:center;
+}
+.toast.up{transform:translate(-50%,0); opacity:1}
+
+/* ---------- remote ---------- */
+.remote{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow)}
+.remote h3{font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3); margin-bottom:12px}
+.dpad{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:12px}
+.dpad button{
+  aspect-ratio:1; background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+  display:grid; place-items:center; color:var(--ink-2); font-weight:600;
+}
+.dpad button:hover{border-color:var(--accent); color:var(--accent)}
+.dpad .ok{background:var(--accent); color:var(--bg); border-color:var(--accent); font-size:11px; letter-spacing:.06em}
+.dpad .sp{visibility:hidden}
+.remote .back{width:100%; padding:9px; background:var(--panel-2); border:1px solid var(--line); border-radius:8px; font-size:12.5px; font-weight:600; color:var(--ink-2)}
+.remote .back:hover{border-color:var(--accent); color:var(--accent)}
+.remote p{margin:12px 0 0; font-size:11.5px; color:var(--ink-3); line-height:1.45}
+
+/* ---------- console ---------- */
+.console{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+.cbar{display:flex; align-items:center; gap:14px; padding:11px 16px; border-bottom:1px solid var(--line); background:var(--panel-2); flex-wrap:wrap}
+.cbar .who{font-size:12.5px; color:var(--ink-3)}
+.cbar .who b{color:var(--ink)}
+.tabs{display:flex; gap:2px; margin-left:auto; flex-wrap:wrap}
+.tabs button{padding:6px 11px; border-radius:6px; font-size:12.5px; font-weight:500; color:var(--ink-2); position:relative}
+.tabs button[aria-selected="true"]{background:var(--panel); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line)}
+.dot{display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--crit); margin-left:5px; vertical-align:2px}
+.cbody{padding:16px}
+
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px}
+.kpi{background:var(--panel-2); border:1px solid var(--line); border-radius:9px; padding:13px 14px}
+.kpi span{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3)}
+.kpi b{display:block; font-size:25px; font-weight:600; margin-top:5px; letter-spacing:-.02em}
+.kpi small{color:var(--ink-3); font-size:11.5px}
+.spark{display:block; width:100%; height:26px; margin-top:6px}
+
+h2.sec{font-size:12px; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3); margin:22px 0 10px}
+h2.sec:first-child{margin-top:0}
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:9px}
+table{width:100%; border-collapse:collapse; font-size:13px; min-width:600px}
+th{
+  text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3);
+  font-weight:600; padding:9px 12px; background:var(--panel-2); border-bottom:1px solid var(--line); white-space:nowrap;
+}
+td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.fresh td{background:var(--accent-soft)}
+.pill{
+  display:inline-flex; align-items:center; gap:5px; padding:2.5px 8px; border-radius:99px;
+  font-size:11px; font-weight:600; white-space:nowrap;
+}
+.pill.ok{background:var(--ok-soft); color:var(--ok)}
+.pill.warn{background:var(--warn-soft); color:var(--warn)}
+.pill.crit{background:var(--crit-soft); color:var(--crit)}
+.pill.mut{background:var(--panel-2); color:var(--ink-3); box-shadow:inset 0 0 0 1px var(--line)}
+.bar{height:4px; border-radius:99px; background:var(--line); overflow:hidden; min-width:56px; margin-top:5px}
+.bar i{display:block; height:100%; border-radius:99px}
+.empty{padding:24px; text-align:center; color:var(--ink-3); font-size:13px}
+.foot{margin-top:20px; padding-top:14px; border-top:1px solid var(--line); color:var(--ink-3); font-size:11.5px; line-height:1.6}
+.foot b{color:var(--ink-2)}
+.reset{padding:6px 11px; border:1px solid var(--line); border-radius:7px; font-size:12px; font-weight:600; color:var(--ink-2); background:var(--panel)}
+.reset:hover{border-color:var(--accent); color:var(--accent)}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <div class="brand">
+      <h1>Orpheus Property Console</h1>
+      <p>Working prototype. The guest television and the operations console run off one shared guest record — act on one, watch the other change.</p>
+    </div>
+    <div class="seg" role="tablist" aria-label="Surface">
+      <button role="tab" id="tab-tv" aria-selected="true" aria-controls="view-tv">Guest television</button>
+      <button role="tab" id="tab-ops" aria-selected="false" aria-controls="view-ops">Hotel console</button>
+    </div>
+  </div>
+
+  <div class="hint">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div><b>Try this:</b> on the television, open <b>Order</b> and send something to Room 812. Then switch to the <b>Hotel console</b> — the kitchen order, the service ticket and the folio line are already there, because there is only one record behind both screens.</div>
+  </div>
+
+  <!-- ============ TELEVISION ============ -->
+  <section id="view-tv" role="tabpanel" aria-labelledby="tab-tv">
+    <div class="stage">
+      <div class="bezel">
+        <div class="screen"><div class="screen-pad" id="tv"></div><div class="toast" id="toast"></div></div>
+      </div>
+      <div class="remote">
+        <h3>Remote</h3>
+        <div class="dpad">
+          <span class="sp"></span><button data-k="ArrowUp" aria-label="Up">↑</button><span class="sp"></span>
+          <button data-k="ArrowLeft" aria-label="Left">←</button><button class="ok" data-k="Enter">OK</button><button data-k="ArrowRight" aria-label="Right">→</button>
+          <span class="sp"></span><button data-k="ArrowDown" aria-label="Down">↓</button><span class="sp"></span>
+        </div>
+        <button class="back" data-k="Backspace">← Back</button>
+        <p>Your keyboard arrows, Enter and Backspace drive the screen too — the same four inputs a hotel remote has.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONSOLE ============ -->
+  <section id="view-ops" role="tabpanel" aria-labelledby="tab-ops" hidden>
+    <div class="console">
+      <div class="cbar">
+        <div class="who">Harbour Grand Manila · <b>Front of house</b></div>
+        <div class="tabs" role="tablist" aria-label="Console section">
+          <button role="tab" data-ops="today" aria-selected="true">Today</button>
+          <button role="tab" data-ops="arrivals" aria-selected="false">Arrivals</button>
+          <button role="tab" data-ops="queue" aria-selected="false">Service queue<span class="dot" id="d-queue" hidden></span></button>
+          <button role="tab" data-ops="kitchen" aria-selected="false">Kitchen<span class="dot" id="d-kitchen" hidden></span></button>
+          <button role="tab" data-ops="folio" aria-selected="false">Folio 812</button>
+        </div>
+      </div>
+      <div class="cbody" id="ops"></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <b>Prototype notes.</b> Sample data only; no live systems are connected. Catalogue titles stand in for the Orpheus Nations feed, which was not reachable when this was built. Rates, names and figures are illustrative.
+    <button class="reset" id="reset" style="margin-left:8px">Reset demo</button>
+  </div>
+</div>
+
+<script>
+/* ================= state ================= */
+const PESO = n => "₱" + n.toLocaleString("en-PH");
+const now = () => Date.now();
+
+const SEED = () => ({
+  guest:{ name:"Maria Reyes", room:"812", nights:2, tier:"Gold" },
+  folio:[
+    {desc:"Room — Deluxe Bay View", note:"2 nights @ ₱7,400", amt:14800, t:now()-86400000*2},
+    {desc:"Minibar", note:"Restocked 14:20", amt:640, t:now()-7200000},
+    {desc:"Laundry — express", note:"3 items", amt:980, t:now()-5400000}
+  ],
+  tickets:[
+    {id:"SR-2291", room:"1104", type:"Extra towels", pri:"Standard", sla:15, t:now()-420000, who:"J. Cruz", done:false},
+    {id:"SR-2288", room:"402",  type:"Aircon not cooling", pri:"Urgent", sla:20, t:now()-1500000, who:"R. Santos", done:false},
+    {id:"SR-2284", room:"915",  type:"Late checkout request", pri:"Standard", sla:30, t:now()-600000, who:"A. Lim", done:false}
+  ],
+  kitchen:[
+    {id:"KO-4471", room:"1104", items:"Caesar salad · Iced tea", station:"Cold", t:now()-540000, state:"Firing"},
+    {id:"KO-4468", room:"706",  items:"Adobo flakes · Garlic rice ×2", station:"Hot", t:now()-1080000, state:"Plating"}
+  ],
+  arrivals:[
+    {name:"Maria Reyes", room:"812", eta:"Arrived", doc:"complete", pay:"authorised", tier:"Gold"},
+    {name:"D. Okonkwo", room:"1210", eta:"15:40", doc:"complete", pay:"authorised", tier:"Platinum"},
+    {name:"S. Fontaine", room:"604", eta:"17:15", doc:"signed", pay:"authorised", tier:"—"},
+    {name:"H. Tanaka", room:"908", eta:"18:00", doc:"scanned", pay:"pending", tier:"Gold"},
+    {name:"L. Moreau", room:"1502", eta:"21:30", doc:"none", pay:"pending", tier:"—"}
+  ],
+  seen:{queue:true, kitchen:true}
+});
+let S = SEED();
+
+/* ================= television ================= */
+const MENU = [
+  {n:"Club sandwich", d:"Triple-decker, hand-cut chips", p:780},
+  {n:"Sinigang na hipon", d:"Prawn, tamarind broth, rice", p:1120},
+  {n:"Margherita pizza", d:"Buffalo mozzarella, basil", p:890},
+  {n:"Cheeseburger", d:"Aged beef, aioli, chips", p:950},
+  {n:"Mango cheesecake", d:"Calamansi cream", p:420}
+];
+const BOOKABLE = [
+  {n:"Spa — deep tissue, 60 min", d:"Today 18:00 · 2 therapists free", p:3200},
+  {n:"Spa — aromatherapy, 90 min", d:"Tomorrow 10:30", p:4100},
+  {n:"Azure Rooftop — dinner for 2", d:"Tonight 19:45 · window", p:0},
+  {n:"Harbour tour — sunset", d:"Tomorrow 16:00 · hotel pier", p:1800}
+];
+const ASKS = [
+  {n:"Extra towels", d:"Housekeeping · target 15 min", pri:"Standard", sla:15},
+  {n:"Turn-down service", d:"Housekeeping · this evening", pri:"Standard", sla:30},
+  {n:"Airport transfer", d:"Concierge will call back", pri:"Standard", sla:20},
+  {n:"Something is broken", d:"Maintenance · target 20 min", pri:"Urgent", sla:20}
+];
+const CATALOGUE = [
+  {t:"The Long Harbour", g:"linear-gradient(160deg,#1B3A5C,#0B1524)"},
+  {t:"Salt & Ember", g:"linear-gradient(160deg,#5C2B2B,#1B0D0D)"},
+  {t:"Northlight", g:"linear-gradient(160deg,#1E4A45,#08201D)"},
+  {t:"Paper Cities", g:"linear-gradient(160deg,#4A3A62,#170F26)"},
+  {t:"Monsoon Season", g:"linear-gradient(160deg,#5A4520,#1D1508)"}
+];
+const CHANNELS = [
+  {n:"ONE Sports HD", d:"Now: Football — matchday 14"},
+  {n:"World News 24", d:"Now: Evening bulletin"},
+  {n:"Cinema One", d:"Now: Feature presentation"},
+  {n:"Discovery Asia", d:"Now: Wild Philippines"}
+];
+
+let screen = "home", fi = 0, cart = [];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ICON = {
+  watch:'<path d="M2 6h20v12H2z"/><path d="M10 10l5 2-5 2z" fill="currentColor"/>',
+  order:'<path d="M4 3v8a4 4 0 008 0V3M8 11v10"/><path d="M18 3c-1.5 2-2 4-2 7h4c0-3-.5-5-2-7zM18 10v11"/>',
+  book:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>',
+  ask:'<path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',
+  hotel:'<path d="M3 21h18M5 21V7l7-4 7 4v14M10 21v-5h4v5"/>',
+  bill:'<path d="M6 2v20l3-2 3 2 3-2 3 2V2l-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'
+};
+const svg = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+ICON[k]+'</svg>';
+
+const TILES = [
+  {k:"watch", b:"Watch", s:"Live TV, films and series"},
+  {k:"order", b:"Order", s:"In-room dining and bar"},
+  {k:"book",  b:"Book",  s:"Spa, tables and tours"},
+  {k:"ask",   b:"Ask",   s:"Concierge and housekeeping"},
+  {k:"hotel", b:"Hotel", s:"Services and wayfinding"},
+  {k:"bill",  b:"Bill",  s:"Folio and express checkout"}
+];
+
+function head(back){
+  const g = S.guest;
+  return '<div class="tv-top"><div>'+
+    (back ? '<div class="tv-back">← Back to menu</div>' :
+      '<div class="tv-hello">Good evening, Ms '+esc(g.name.split(" ").pop())+'</div>')+
+    '<div class="tv-sub">Room '+g.room+' · '+g.nights+' nights remaining · '+g.tier+' member</div>'+
+  '</div><div class="tv-chip">2 messages</div></div>';
+}
+function money(p){ return p ? '<span class="amt">'+PESO(p)+'</span>' : '<span class="amt">No charge</span>'; }
+function rows(items){
+  return '<div class="list">'+items.map((m,i)=>
+    '<button class="li f" data-i="'+i+'"><div><b>'+esc(m.n)+'</b><small>'+esc(m.d)+'</small></div>'+money(m.p)+'</button>'
+  ).join("")+'</div>';
+}
+
+function renderTV(){
+  const el = document.getElementById("tv");
+  let h = "";
+  if(screen === "home"){
+    h = head(false)+'<div class="tv-body"><div class="tiles">'+
+      TILES.map(t=>'<button class="tile f" data-go="'+t.k+'">'+svg(t.k)+'<b>'+t.b+'</b><span>'+t.s+'</span></button>').join("")+
+      '</div></div>';
+  } else if(screen === "watch"){
+    h = head(true)+'<div class="tv-body"><p class="rowlab">Orpheus Nations · featured</p><div class="rail">'+
+      CATALOGUE.map(c=>'<div class="art f" style="background:'+c.g+'">'+esc(c.t)+'</div>').join("")+
+      '</div><p class="rowlab">Live channels</p>'+rows(CHANNELS.map(c=>({n:c.n,d:c.d,p:0})))+'</div>';
+  } else if(screen === "order"){
+    const total = cart.reduce((a,b)=>a+b.p,0);
+    h = head(true)+'<div class="tv-body"><p class="rowlab">In-room dining · to Room '+S.guest.room+'</p>'+rows(MENU)+
+      (cart.length ? '<div class="folio-total"><span>'+cart.length+' item'+(cart.length>1?"s":"")+' — press OK on “Send order”</span><span class="amt">'+PESO(total)+'</span></div>'+
+        '<div class="list" style="margin-top:1cqw"><button class="li f" data-send="1"><div><b>Send order to the kitchen</b><small>Charged to your folio — no signature needed</small></div></button></div>' : "")+
+      '</div>';
+  } else if(screen === "book"){
+    h = head(true)+'<div class="tv-body"><p class="rowlab">Reserve</p>'+rows(BOOKABLE)+'</div>';
+  } else if(screen === "ask"){
+    h = head(true)+'<div class="tv-body"><p class="rowlab">How can we help?</p>'+rows(ASKS.map(a=>({n:a.n,d:a.d,p:0})))+'</div>';
+  } else if(screen === "hotel"){
+    h = head(true)+'<div class="tv-body"><p class="rowlab">Harbour Grand Manila</p>'+rows([
+      {n:"Azure Rooftop",d:"Level 21 · dinner 18:00–23:00",p:0},
+      {n:"The Anchor Bar",d:"Lobby level · until 01:00",p:0},
+      {n:"Serenity Spa",d:"Level 4 · 10:00–22:00",p:0},
+      {n:"Pool & gym",d:"Level 5 · gym open 24 hours",p:0},
+      {n:"Front desk",d:"Dial 0 · always open",p:0}
+    ])+'</div>';
+  } else if(screen === "bill"){
+    const tot = S.folio.reduce((a,b)=>a+b.amt,0);
+    h = head(true)+'<div class="tv-body"><p class="rowlab">Folio · Room '+S.guest.room+'</p><div>'+
+      S.folio.map(f=>'<div class="folio-row"><div>'+esc(f.desc)+'<small style="display:block">'+esc(f.note)+'</small></div><span class="amt">'+PESO(f.amt)+'</span></div>').join("")+
+      '</div><div class="folio-total"><span>Total due</span><span class="amt">'+PESO(tot)+'</span></div>'+
+      '<div class="list" style="margin-top:1.4cqw"><button class="li f"><div><b>Check out and settle</b><small>Charged to the card on file, ending 4417</small></div></button></div></div>';
+  }
+  el.innerHTML = h;
+  const fs = el.querySelectorAll(".f");
+  if(fi >= fs.length) fi = Math.max(0, fs.length-1);
+  fs.forEach((n,i)=> n.classList.toggle("on", i===fi));
+  if(fs[fi]) fs[fi].scrollIntoView({block:"nearest", inline:"nearest"});
+  fs.forEach((n,i)=> n.addEventListener("click", ()=>{ fi=i; renderTV(); activate(); }));
+}
+
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("up");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("up"), 3400);
+}
+const pad = n => String(n).padStart(4,"0");
+
+function activate(){
+  const el = document.getElementById("tv");
+  const node = el.querySelectorAll(".f")[fi];
+  if(!node) return;
+
+  if(node.dataset.go){ screen = node.dataset.go; fi = 0; cart = []; return renderTV(); }
+
+  if(screen === "order"){
+    if(node.dataset.send){
+      const total = cart.reduce((a,b)=>a+b.p,0);
+      const names = cart.map(c=>c.n).join(" · ");
+      S.kitchen.unshift({id:"KO-"+pad(4472+S.kitchen.length), room:S.guest.room, items:names, station:"Hot", t:now(), state:"New", fresh:true});
+      S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:"In-room dining delivery", pri:"Standard", sla:35, t:now(), who:"Unassigned", done:false, fresh:true});
+      S.folio.push({desc:"In-room dining", note:names, amt:total, t:now(), fresh:true});
+      S.seen.kitchen = false; S.seen.queue = false; badges();
+      cart = []; toast("Order sent — it is on your folio"); fi = 0; return renderTV();
+    }
+    const item = MENU[+node.dataset.i];
+    cart.push(item); toast(item.n + " added"); return renderTV();
+  }
+
+  if(screen === "book"){
+    const b = BOOKABLE[+node.dataset.i];
+    S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:"Reservation — "+b.n, pri:"Standard", sla:20, t:now(), who:"Unassigned", done:false, fresh:true});
+    if(b.p) S.folio.push({desc:b.n, note:"Reserved from the television", amt:b.p, t:now(), fresh:true});
+    S.seen.queue = false; badges(); toast("Reserved — confirmation on its way"); return renderTV();
+  }
+
+  if(screen === "ask"){
+    const a = ASKS[+node.dataset.i];
+    S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:a.n, pri:a.pri, sla:a.sla, t:now(), who:"Unassigned", done:false, fresh:true});
+    S.seen.queue = false; badges(); toast("Asked — someone is on it"); return renderTV();
+  }
+
+  if(screen === "bill"){ toast("Checked out. Safe travels, Ms Reyes."); return; }
+  if(screen === "watch"){ toast("Playing — press Back to return"); return; }
+}
+
+/* geometric d-pad focus */
+function move(dir){
+  const fs = [...document.querySelectorAll("#tv .f")];
+  if(!fs.length) return;
+  const cur = fs[fi].getBoundingClientRect();
+  const cx = cur.left+cur.width/2, cy = cur.top+cur.height/2;
+  let best = -1, bestScore = Infinity;
+  fs.forEach((n,i)=>{
+    if(i===fi) return;
+    const r = n.getBoundingClientRect(), x = r.left+r.width/2, y = r.top+r.height/2;
+    const dx = x-cx, dy = y-cy;
+    const fwd = dir==="ArrowRight"?dx : dir==="ArrowLeft"?-dx : dir==="ArrowDown"?dy : -dy;
+    if(fwd <= 2) return;
+    const off = (dir==="ArrowLeft"||dir==="ArrowRight") ? Math.abs(dy) : Math.abs(dx);
+    const score = fwd + off*2.2;
+    if(score < bestScore){ bestScore = score; best = i; }
+  });
+  if(best >= 0){ fi = best; renderTV(); }
+}
+function key(k){
+  if(k==="Enter") return activate();
+  if(k==="Backspace"){ if(screen!=="home"){ screen="home"; fi=0; cart=[]; renderTV(); } return; }
+  if(k.startsWith("Arrow")) move(k);
+}
+document.addEventListener("keydown", e=>{
+  if(document.getElementById("view-tv").hidden) return;
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Enter","Backspace"].includes(e.key)){
+    if(e.target.closest(".remote")) return;
+    e.preventDefault(); key(e.key);
+  }
+});
+document.querySelectorAll("[data-k]").forEach(b=> b.addEventListener("click", ()=>key(b.dataset.k)));
+
+/* ================= console ================= */
+let opsTab = "today";
+const mins = t => Math.floor((now()-t)/60000);
+const ago = t => { const m = mins(t); return m<1 ? "just now" : m<60 ? m+" min ago" : Math.floor(m/60)+" h ago"; };
+const DOC = {
+  complete:['ok','Scanned & signed'], signed:['ok','Signed'],
+  scanned:['warn','Scan only'], none:['crit','Not started']
+};
+
+function slaCell(t, sla){
+  const used = (now()-t)/60000, pct = Math.min(100, used/sla*100);
+  const cls = pct>=100 ? "crit" : pct>=70 ? "warn" : "ok";
+  const left = Math.round(sla-used);
+  const col = cls==="crit" ? "var(--crit)" : cls==="warn" ? "var(--warn)" : "var(--ok)";
+  return '<span class="pill '+cls+'">'+(left<0 ? Math.abs(left)+" min over" : left+" min left")+'</span>'+
+         '<div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div>';
+}
+function sparkline(pts){
+  const w=100,h=26,mx=Math.max(...pts),mn=Math.min(...pts);
+  const d = pts.map((p,i)=>[i/(pts.length-1)*w, h-2-((p-mn)/((mx-mn)||1))*(h-6)]);
+  const line = d.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  const area = line+" L"+w+" "+h+" L0 "+h+" Z";
+  const last = d[d.length-1];
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true">'+
+    '<path d="'+area+'" fill="var(--accent)" opacity=".13"/>'+
+    '<path d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'+
+    '<circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="2" fill="var(--accent)"/></svg>';
+}
+function table(head, body){
+  return '<div class="tablewrap"><table><thead><tr>'+head.map(h=>"<th>"+h+"</th>").join("")+
+    '</tr></thead><tbody>'+(body || '<tr><td colspan="'+head.length+'"><div class="empty">Nothing here yet.</div></td></tr>')+'</tbody></table></div>';
+}
+
+function renderOps(){
+  const el = document.getElementById("ops");
+  const open = S.tickets.filter(t=>!t.done);
+  const breached = open.filter(t=>(now()-t.t)/60000 >= t.sla).length;
+  const ancillary = S.folio.filter(f=>f.desc!=="Room — Deluxe Bay View").reduce((a,b)=>a+b.amt,0);
+  let h = "";
+
+  if(opsTab === "today"){
+    h += '<div class="kpis">'+
+      '<div class="kpi"><span>Occupancy</span><b>84%</b><small>212 of 252 rooms</small>'+sparkline([71,74,72,79,81,80,84])+'</div>'+
+      '<div class="kpi"><span>Ancillary today</span><b class="mono">'+PESO(ancillary)+'</b><small>Room 812 · from the television</small>'+sparkline([2,3,3,5,4,6,8])+'</div>'+
+      '<div class="kpi"><span>Open requests</span><b>'+open.length+'</b><small>'+(breached? breached+" past target" : "all within target")+'</small></div>'+
+      '<div class="kpi"><span>Kitchen orders</span><b>'+S.kitchen.length+'</b><small>'+S.kitchen.filter(k=>k.state==="New").length+' waiting to fire</small></div>'+
+    '</div>';
+    h += '<h2 class="sec">Needs attention now</h2>';
+    const rowsH = open.slice(0,4).map(t=>
+      '<tr'+(t.fresh?' class="fresh"':'')+'><td class="mono">'+t.id+'</td><td class="mono">'+t.room+'</td><td>'+esc(t.type)+'</td>'+
+      '<td><span class="pill '+(t.pri==="Urgent"?"crit":"mut")+'">'+t.pri+'</span></td>'+
+      '<td>'+slaCell(t.t,t.sla)+'</td><td>'+esc(t.who)+'</td></tr>').join("");
+    h += table(["Ref","Room","Request","Priority","Target","Assigned"], rowsH);
+  }
+
+  if(opsTab === "arrivals"){
+    h += '<h2 class="sec">Arrivals — today</h2>';
+    h += table(["Guest","Room","Expected","Documents","Payment","Tier"],
+      S.arrivals.map(a=>{
+        const d = DOC[a.doc];
+        return '<tr><td><b>'+esc(a.name)+'</b></td><td class="mono">'+a.room+'</td><td>'+esc(a.eta)+'</td>'+
+        '<td><span class="pill '+d[0]+'">'+d[1]+'</span></td>'+
+        '<td><span class="pill '+(a.pay==="authorised"?"ok":"warn")+'">'+(a.pay==="authorised"?"Authorised":"Pending")+'</span></td>'+
+        '<td>'+esc(a.tier)+'</td></tr>';
+      }).join(""));
+    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Three of five guests completed identity capture before arrival and can go straight to their room. The two marked amber still need the desk.</p>';
+  }
+
+  if(opsTab === "queue"){
+    S.seen.queue = true; badges();
+    h += '<h2 class="sec">Service queue — every channel, one list</h2>';
+    h += table(["Ref","Room","Request","Priority","Target","Assigned","Raised"],
+      open.map(t=>'<tr'+(t.fresh?' class="fresh"':'')+'><td class="mono">'+t.id+'</td><td class="mono">'+t.room+'</td>'+
+        '<td>'+esc(t.type)+'</td><td><span class="pill '+(t.pri==="Urgent"?"crit":"mut")+'">'+t.pri+'</span></td>'+
+        '<td>'+slaCell(t.t,t.sla)+'</td><td>'+(t.who==="Unassigned"?'<span class="pill warn">Unassigned</span>':esc(t.who))+'</td>'+
+        '<td style="color:var(--ink-3)">'+ago(t.t)+'</td></tr>').join(""));
+  }
+
+  if(opsTab === "kitchen"){
+    S.seen.kitchen = true; badges();
+    h += '<h2 class="sec">Kitchen display</h2>';
+    h += table(["Ref","Room","Items","Station","State","Placed"],
+      S.kitchen.map(k=>'<tr'+(k.fresh?' class="fresh"':'')+'><td class="mono">'+k.id+'</td><td class="mono">'+k.room+'</td>'+
+        '<td>'+esc(k.items)+'</td><td>'+k.station+'</td>'+
+        '<td><span class="pill '+(k.state==="New"?"warn":k.state==="Plating"?"ok":"mut")+'">'+k.state+'</span></td>'+
+        '<td style="color:var(--ink-3)">'+ago(k.t)+'</td></tr>').join(""));
+  }
+
+  if(opsTab === "folio"){
+    const tot = S.folio.reduce((a,b)=>a+b.amt,0);
+    h += '<h2 class="sec">Folio — Room 812 · Maria Reyes</h2>';
+    h += table(["Posted","Description","Detail","Amount"],
+      S.folio.map(f=>'<tr'+(f.fresh?' class="fresh"':'')+'><td style="color:var(--ink-3)">'+ago(f.t)+'</td>'+
+        '<td><b>'+esc(f.desc)+'</b></td><td style="color:var(--ink-2)">'+esc(f.note)+'</td>'+
+        '<td class="mono" style="text-align:right">'+PESO(f.amt)+'</td></tr>').join("")+
+      '<tr><td></td><td><b>Total due</b></td><td></td><td class="mono" style="text-align:right"><b>'+PESO(tot)+'</b></td></tr>');
+    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Every outlet posts here through one interface — including the television. This folio reconciles to the property management system.</p>';
+  }
+  el.innerHTML = h;
+}
+
+function badges(){
+  document.getElementById("d-queue").hidden = S.seen.queue;
+  document.getElementById("d-kitchen").hidden = S.seen.kitchen;
+}
+document.querySelectorAll("[data-ops]").forEach(b=> b.addEventListener("click", ()=>{
+  opsTab = b.dataset.ops;
+  document.querySelectorAll("[data-ops]").forEach(o=>o.setAttribute("aria-selected", String(o===b)));
+  renderOps();
+}));
+
+/* ================= shell ================= */
+function show(which){
+  const tv = which === "tv";
+  document.getElementById("view-tv").hidden = !tv;
+  document.getElementById("view-ops").hidden = tv;
+  document.getElementById("tab-tv").setAttribute("aria-selected", String(tv));
+  document.getElementById("tab-ops").setAttribute("aria-selected", String(!tv));
+  if(!tv) renderOps();
+}
+document.getElementById("tab-tv").addEventListener("click", ()=>show("tv"));
+document.getElementById("tab-ops").addEventListener("click", ()=>show("ops"));
+document.getElementById("reset").addEventListener("click", ()=>{
+  S = SEED(); screen = "home"; fi = 0; cart = []; opsTab = "today";
+  document.querySelectorAll("[data-ops]").forEach(o=>o.setAttribute("aria-selected", String(o.dataset.ops==="today")));
+  badges(); renderTV(); renderOps(); show("tv");
+});
+
+renderTV(); renderOps(); badges();
+setInterval(()=>{ if(!document.getElementById("view-ops").hidden && (opsTab==="queue"||opsTab==="today")) renderOps(); }, 15000);
+</script>
