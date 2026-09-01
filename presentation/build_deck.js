@@ -91,7 +91,7 @@ function footnote(s, text, dark) {
     { isTextBox: true, x: M, y: 4.18, w: 7.55, h: 1.25, margin: 0,
       fontFace: SANS, fontSize: 14, color: MUTED_D, lineSpacing: 22 });
 
-  ["Runs on the TV. No set-top box.", "Powered by Orpheus Nations."].forEach((t, i) => {
+  ["One Android app. No set-top box.", "Powered by Orpheus Nations."].forEach((t, i) => {
     s.addShape(pres.ShapeType.roundRect, { x: M + i * 3.5, y: 5.82, w: 3.3, h: 0.46, rectRadius: 0.23,
       fill: { color: INK_SOFT }, line: { color: INK_LINE, width: 1 } });
     s.addText(t, { isTextBox: true, x: M + i * 3.5, y: 5.82, w: 3.3, h: 0.46, margin: 0,
@@ -601,7 +601,7 @@ function footnote(s, text, dark) {
 
   const pts = [
     ["Personal on arrival", "Name, nights remaining and loyalty tier — drawn from the same record the front desk reads."],
-    ["Identical in every property", "One application, one interface, one brand standard, whatever is on the wall."],
+    ["Identical in every property", "One Android application, one interface, one brand standard, on every set in the estate."],
     ["Revenue, not just cost", "The remote reaches room service, the spa and the bar. The screen begins to earn."],
     ["Reset between guests", "Profile, cast pairings, history and cached logins cleared automatically on turnover."],
   ];
@@ -642,41 +642,49 @@ function footnote(s, text, dark) {
     s.addText(r[2], { isTextBox: true, x: M + 8.25, y, w: 3.45, h: rh - 0.1, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: GOLD, valign: "middle" });
   });
-  footnote(s, "Requires hospitality-model televisions, which permit managed installation and lockdown. Existing consumer estates run the same application on a small device until refresh.", true);
-  s.addNotes("Raise the hospitality-SKU caveat yourself. For an owner it lands as a capex-timing question, not an objection: the platform aligns to the TV refresh cycle already in the plan.");
+  footnote(s, "Requires Android TV or Google TV hospitality models, which permit managed install and lockdown. Tizen and webOS estates run the same app on a small Android device until refresh.", true);
+  s.addNotes("Raise the Android-SKU caveat yourself. For an owner it lands as a capex-timing question, not an objection: the platform aligns to the television refresh cycle already in the plan, and Android hospitality sets are the cheapest end of that market.");
 }
 
-/* ================================================ 18. TV ESTATE */
+/* ================================================ 18. ANDROID ESTATE */
 {
   const s = lightSlide();
-  slideTitle(s, "Whatever is already on the wall", false, "platform-neutral");
-  body(s, "One backend, thin clients. Personalisation, ordering and billing all sit server-side; the television renders and takes input. That is what lets a mixed estate converge on one guest experience without a single-vendor hardware commitment.",
+  slideTitle(s, "One Android app. Every screen.", false, "android, end to end");
+  body(s, "Every surface in the property runs Android — the television in the room, the tablets on the floor, the handhelds in the corridor, the kiosk in the lobby. One application, one release train, one way to manage a device.",
     M, 1.72, 11.4, 0.62, false, 13);
 
   const est = [
-    ["TCL", "Google TV / Android TV", "Native Android TV application, managed install across the estate.", true],
-    ["Samsung", "Tizen hospitality", "HTML5 application on Samsung's hospitality stack.", false],
-    ["LG", "webOS hospitality", "HTML5 application on LG's Pro:Centric stack.", false],
-    ["Mixed / legacy", "Any brand", "Same application on a small device, until the televisions refresh.", false],
+    ["In-room television", "Android TV / Google TV", "TCL, Sony, Hisense, Philips and others. The guest app runs on the set — nothing behind it.", true],
+    ["Staff tablets", "Android", "Restaurant and bar point of sale, kitchen display, housekeeping and inspection boards.", false],
+    ["Handhelds", "Android", "Passport and ID capture at the desk or kerbside, order running, maintenance work orders.", false],
+    ["Self-service kiosk", "Android", "Lobby check-in, document capture and signature, key issue.", false],
   ];
   const cw = 2.92, gx = 0.31;
   est.forEach((e, i) => {
     const x = M + i * (cw + gx);
-    card(s, x, 2.55, cw, 2.15, false, e[3] ? "FBF6E9" : PAPER);
-    s.addText(e[0], { isTextBox: true, x: x + 0.26, y: 2.78, w: cw - 0.52, h: 0.36, margin: 0,
-      fontFace: SERIF, fontSize: 19, bold: true, color: INK });
-    s.addText(e[1], { isTextBox: true, x: x + 0.26, y: 3.18, w: cw - 0.52, h: 0.3, margin: 0,
+    card(s, x, 2.5, cw, 2.05, false, e[3] ? "FBF6E9" : PAPER);
+    s.addText(e[0], { isTextBox: true, x: x + 0.26, y: 2.7, w: cw - 0.52, h: 0.62, margin: 0,
+      fontFace: SERIF, fontSize: 17, bold: true, color: INK, lineSpacing: 21 });
+    s.addText(e[1], { isTextBox: true, x: x + 0.26, y: 3.32, w: cw - 0.52, h: 0.28, margin: 0,
       fontFace: SANS, fontSize: 11, bold: true, color: GOLD_DEEP });
-    s.addText(e[2], { isTextBox: true, x: x + 0.26, y: 3.56, w: cw - 0.52, h: 0.98, margin: 0,
+    s.addText(e[2], { isTextBox: true, x: x + 0.26, y: 3.66, w: cw - 0.52, h: 0.82, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: MUTED_L, lineSpacing: 14 });
   });
-  card(s, M, 4.95, CW, 1.0, false, "0B1220");
-  s.addText("Before we quote, we survey", { isTextBox: true, x: M + 0.35, y: 5.1, w: 4.0, h: 0.3, margin: 0,
+
+  card(s, M, 4.75, CW, 1.55, false, "0B1220");
+  s.addText("Why one operating system", { isTextBox: true, x: M + 0.35, y: 4.95, w: 5.2, h: 0.3, margin: 0,
     fontFace: SANS, fontSize: 12, bold: true, color: GOLD });
-  s.addText("Television models per property, and whether they are hospitality SKUs · per-room network to each set · VLAN separation of guest and device traffic · multicast, where live television is carried over IP",
-    { isTextBox: true, x: M + 0.35, y: 5.42, w: CW - 0.7, h: 0.42, margin: 0,
-      fontFace: SANS, fontSize: 11.5, color: CREAM });
-  s.addNotes("For a group the survey is a per-property exercise and should be priced as one. Estates are rarely as uniform as the standards manual claims.");
+  s.addText("One codebase and one release train, not four · one device-management enrolment for the whole estate · commodity hardware the group can source in any market · a single patch and security posture to put in front of your vendor review",
+    { isTextBox: true, x: M + 0.35, y: 5.28, w: 5.3, h: 0.85, margin: 0,
+      fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
+  s.addText("Before we quote, we survey", { isTextBox: true, x: M + 6.3, y: 4.95, w: 5.2, h: 0.3, margin: 0,
+    fontFace: SANS, fontSize: 12, bold: true, color: GOLD });
+  s.addText("Television models per property, and whether they are Android hospitality SKUs · per-room network to each set · VLAN separation of guest and device traffic · multicast, where live television is carried over IP",
+    { isTextBox: true, x: M + 6.3, y: 5.28, w: 5.3, h: 0.85, margin: 0,
+      fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
+
+  footnote(s, "Samsung Tizen and LG webOS sets are not native Android targets. Those properties run the same application on a small Android device until the televisions refresh.", false);
+  s.addNotes("Committing to Android is a strength, not a limitation — say it that way. One codebase instead of four, one MDM enrolment, and hardware the group can buy in any market. The cost is honest and on the slide: a Samsung or LG estate needs a small Android device until refresh, so establish early which sets a given property actually has.");
 }
 
 /* ================================================ 19. ORPHEUS NATIONS */

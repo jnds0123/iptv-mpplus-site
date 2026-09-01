@@ -189,36 +189,72 @@ This module makes it the primary in-room interface.
 
 ---
 
-## 4. TV platform strategy
+## 4. Device strategy — Android everywhere
 
-The goal is no set-top box: the guest application runs on the television itself. That is
-achievable across the major hospitality TV estates, but **the deployment path differs per
-platform and this materially affects the rollout.** Understating the difference here is how TV
-projects slip.
+**The platform targets one operating system: Android.** Not only the television — every
+device in the property, guest-facing and staff-facing alike.
 
-| Estate | OS | Guest app form | Deployment path |
-|---|---|---|---|
-| TCL (most markets) | Google TV / Android TV | Native Android TV APK | Play Store, or enterprise sideload under MDM |
-| TCL (some SKUs/regions) | Titan OS or Roku | HTML5 app, reduced feature set | Platform-specific partner programme |
-| Samsung hospitality | Tizen | HTML5 app on Samsung's B2B stack | Samsung hospitality tooling |
-| LG hospitality | webOS | HTML5 app on LG's Pro:Centric stack | LG hospitality tooling |
-| Existing estate, any brand | — | Android TV APK on a small box | Fallback only, where the TV cannot host the app |
+| Surface | Device | Client |
+|---|---|---|
+| In-room television | Android TV / Google TV hospitality set | Native Android TV app (leanback UI, D-pad input) |
+| Restaurant, bar, room-service POS | Android tablet | Native Android app (touch UI) |
+| Kitchen display | Android tablet or Android-based panel | Native Android app, kiosk mode |
+| Housekeeping and maintenance | Android handheld or tablet | Native Android app |
+| Identity capture | Android handheld with camera, or a tablet at the desk | Native Android app, on-device MRZ/OCR |
+| Self-service kiosk | Android kiosk unit | Native Android app, locked task mode |
+| Guest's own phone | Android or iOS | Responsive web — no install asked of a guest |
+| Manager dashboard | Any browser | Responsive web |
 
-**One backend, thin clients.** All business logic, personalisation, and ordering live server-side.
-The TV client is a rendering and input layer. An HTML5 client covers Tizen, webOS, and Titan;
-a native Android TV client covers Google TV estates and gives the better video pipeline.
+The one deliberate exception is the guest's own phone. Asking a guest to install an app
+for a two-night stay fails; that surface is a web page reached from a QR code or a link
+in the confirmation, and it is the only client that must also work on iOS.
+
+### Why this is the right constraint
+
+- **One codebase and one release train.** A shared Kotlin core (networking, auth, the
+  guest record, offline queue, sync) with per-surface UI modules. Supporting Tizen and
+  webOS alongside Android would mean maintaining an HTML5 client in parallel forever,
+  for a minority of screens.
+- **One device-management story.** A single Android Enterprise / EMM enrolment covers
+  the television, the tablets, the handhelds and the kiosk. Provisioning, policy,
+  patching and remote wipe are one process across the estate, not four.
+- **Commodity hardware.** Android hospitality televisions, tablets and handhelds are
+  sourceable in any market at competitive prices, with more than one vendor. Nothing
+  in the platform ties a group to a single hardware supplier.
+- **One security posture.** A single patch baseline and one set of platform controls to
+  present at a vendor review, rather than a matrix of per-OS answers.
+- **Offline tolerance.** Native Android lets every staff device hold a local queue and
+  keep taking orders and requests through a network drop, syncing when it returns. An
+  HTML5 client on a vendor's TV stack cannot be relied on to do this.
+
+### The honest cost
+
+**Samsung Tizen and LG webOS sets cannot run the application natively.** Those two
+account for a large share of installed hospitality estates. A property on either runs
+the identical app on a small Android device behind the set until the televisions
+refresh — which reintroduces exactly the box the platform otherwise removes, for that
+property, for that period.
+
+This is a real trade and should be stated in the first meeting, not discovered at
+survey. The counter-argument is timing: the box is temporary and aligned to a refresh
+cycle the group already budgets for, and it buys a single codebase in exchange.
 
 **Two constraints to put in front of a hotel's IT before signing anything:**
 
-1. **Commercial SKU, not consumer.** Hospitality-model televisions permit managed app install,
-   kiosk lockdown, cloned setup across rooms, and centralised firmware control. Consumer models
-   generally do not, and a consumer estate may need the set-top fallback despite the intent.
-2. **Network.** Per-room wired or reliable WiFi, VLAN separation of guest and device traffic, and
-   multicast support if live TV is delivered over IP rather than RF.
+1. **Hospitality SKU, not consumer.** Hospitality-model Android televisions permit
+   managed app install, kiosk lockdown, cloned setup across rooms and centralised
+   firmware control. Consumer models generally do not.
+2. **Network.** Per-room wired or reliable WiFi, VLAN separation of guest and device
+   traffic, and multicast support if live TV is delivered over IP rather than RF.
 
 Neither is a blocker. Both are cheaper to discover at survey stage than at install stage.
 
----
+### Server-side by default
+
+All business logic, personalisation, pricing and billing stay server-side. Every Android
+client is a rendering, input and local-queue layer. This keeps behaviour identical across
+surfaces, lets a menu or rate change take effect everywhere at once, and keeps the client
+small enough to run on the modest hardware inside a television.
 
 ## 5. PMS position
 
@@ -282,7 +318,7 @@ big-bang launch.
 |---|---|---|
 | 1 | `identity` + `crm` + document vault | The guest record is the spine; nothing else is coherent without it |
 | 2 | `pay` + folio, `order` for one outlet | Proves the universal charge path on a small blast radius |
-| 3 | `tv` guest app on the lead TV platform | Highest visible impact; needs phases 1–2 to be worth anything |
+| 3 | `tv` guest app on Android TV | Highest visible impact; needs phases 1–2 to be worth anything |
 | 4 | `serve` + `resv` | Operational depth once the guest-facing surfaces exist |
 | 5 | `booking` + distribution | Largest integration surface, most valuable once the rest is proven |
 | 6 | `ops` analytics, multi-property | Meaningful only once real data is flowing |
@@ -297,8 +333,8 @@ Items that need a decision or an answer from outside this document before build 
    territory are all unknown here — `orpheusnations.com` was not reachable from the environment this
    document was drafted in. The `tv` module treats the catalogue as an abstract content provider
    until the real interface is documented.
-2. **Lead TV platform per deal.** Platform-neutral as a product position; each deployment still
-   picks one estate first.
+2. **Android television SKUs per target property.** The estate's actual models decide whether
+   a property is a native deployment or needs an interim Android device behind the set.
 3. **PMS shape per target property.** System of record, or alongside an incumbent.
 4. **Target markets**, which determine statutory guest-register reporting, tax and receipt rules,
    and the payment methods that must be supported at launch.

@@ -13,7 +13,7 @@ operators, the platform architecture behind it, and a clickable prototype.
 | `presentation/Orpheus-Hospitality-Suite.pptx` | 24-slide sales deck, with speaker notes on every slide |
 | `presentation/Orpheus-Hospitality-Suite.pdf` | The same deck as PDF, for sending ahead of a meeting |
 | `presentation/build_deck.js` | Generator for the deck — edit this, not the .pptx |
-| `docs/architecture.md` | Platform architecture: modules, data model, TV strategy, build sequence |
+| `docs/architecture.md` | Platform architecture: modules, data model, Android device strategy, build sequence |
 | `demo/index.html` | Clickable prototype — guest television and hotel operations console |
 | `privacy-policy.html` | Existing privacy policy for the IPTV MP+ Android app |
 
@@ -26,6 +26,12 @@ requests and guest identity documents are bought property by property from whoev
 local. The platform owns that layer, on one guest record, plugged into the enterprise
 systems the group already runs. The guest television is the visible edge of it, running
 natively on the set with no box behind it.
+
+Every device in the property runs Android — the television, the point-of-sale tablets,
+the kitchen display, the housekeeping handhelds, the identity scanner and the lobby
+kiosk. One codebase, one device-management enrolment, commodity hardware. The one
+exception is the guest's own phone, which is served as a web page, because no guest
+installs an app for a two-night stay.
 
 ## Rebuilding the deck
 
@@ -70,3 +76,9 @@ real input:
    actually complete — and correct anyone who reads it the other way.
 4. **PMS and loyalty integration** is scoped per vendor. The deck deliberately promises
    no generic connector.
+
+One trade is stated plainly in both the deck and the architecture doc rather than
+buried: **Samsung Tizen and LG webOS sets cannot run the Android app natively.** A
+property on either runs the same app on a small Android device behind the set until the
+televisions refresh. Establish which sets a target property actually has before the
+"no set-top box" line is used in a room.
