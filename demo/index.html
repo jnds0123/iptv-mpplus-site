@@ -215,7 +215,7 @@ tr.fresh td{background:var(--accent-soft)}
 
   <div class="hint">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
-    <div><b>Try this:</b> on the television, open <b>Order</b> and send something to Room 812. Then switch to the <b>Hotel console</b> — the kitchen order, the service ticket and the folio line are already there, because there is only one record behind both screens.</div>
+    <div><b>Try this:</b> on the television, open <b>Order</b> and send something to Room 812 — or open <b>Ask</b> and set a wake-up call. Then switch to the <b>Hotel console</b>: the kitchen order, the service ticket and the folio line are already there, because one record sits behind the screen, the room phone and the desk alike.</div>
   </div>
 
   <!-- ============ TELEVISION ============ -->
@@ -270,12 +270,14 @@ const SEED = () => ({
   folio:[
     {desc:"Room — Deluxe Bay View", note:"2 nights @ ₱7,400", amt:14800, t:now()-86400000*2},
     {desc:"Minibar", note:"Restocked 14:20", amt:640, t:now()-7200000},
-    {desc:"Laundry — express", note:"3 items", amt:980, t:now()-5400000}
+    {desc:"Laundry — express", note:"3 items", amt:980, t:now()-5400000},
+    {desc:"Telephone", note:"IDD Singapore · 12 min · room phone", amt:480, t:now()-10800000}
   ],
   tickets:[
     {id:"SR-2291", room:"1104", type:"Extra towels", pri:"Standard", sla:15, t:now()-420000, who:"J. Cruz", done:false},
     {id:"SR-2288", room:"402",  type:"Aircon not cooling", pri:"Urgent", sla:20, t:now()-1500000, who:"R. Santos", done:false},
-    {id:"SR-2284", room:"915",  type:"Late checkout request", pri:"Standard", sla:30, t:now()-600000, who:"A. Lim", done:false}
+    {id:"SR-2284", room:"915",  type:"Late checkout request", pri:"Standard", sla:30, t:now()-600000, who:"A. Lim", done:false},
+    {id:"SR-2280", room:"1104", type:"Wake-up call — 05:15", pri:"Standard", sla:45, t:now()-900000, who:"Front desk", done:false}
   ],
   kitchen:[
     {id:"KO-4471", room:"1104", items:"Caesar salad · Iced tea", station:"Cold", t:now()-540000, state:"Firing"},
@@ -307,6 +309,8 @@ const BOOKABLE = [
   {n:"Harbour tour — sunset", d:"Tomorrow 16:00 · hotel pier", p:1800}
 ];
 const ASKS = [
+  {n:"Wake-up call — 06:30", d:"Rings the room phone, then the desk if you don't answer", pri:"Standard", sla:60},
+  {n:"Do not disturb — tonight", d:"Holds calls, and tells housekeeping", pri:"Standard", sla:10},
   {n:"Extra towels", d:"Housekeeping · target 15 min", pri:"Standard", sla:15},
   {n:"Turn-down service", d:"Housekeeping · this evening", pri:"Standard", sla:30},
   {n:"Airport transfer", d:"Concierge will call back", pri:"Standard", sla:20},
@@ -581,7 +585,7 @@ function renderOps(){
         '<td><b>'+esc(f.desc)+'</b></td><td style="color:var(--ink-2)">'+esc(f.note)+'</td>'+
         '<td class="mono" style="text-align:right">'+PESO(f.amt)+'</td></tr>').join("")+
       '<tr><td></td><td><b>Total due</b></td><td></td><td class="mono" style="text-align:right"><b>'+PESO(tot)+'</b></td></tr>');
-    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Every outlet posts here through one interface — including the television. This folio reconciles to the property management system.</p>';
+    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Every outlet posts here through one interface — the television, and the room phone through the PBX. This folio reconciles to the property management system.</p>';
   }
   el.innerHTML = h;
 }

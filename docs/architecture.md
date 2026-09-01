@@ -31,8 +31,8 @@ not an owner of its own copy.
                        ┌─────────────────────────────────────────┐
                        │          Guest-facing surfaces          │
                        ├──────────┬──────────┬─────────┬─────────┤
-                       │  In-room │  Guest   │  Web    │  QR /   │
-                       │    TV    │  mobile  │ booking │ kiosk   │
+                       │ In-room  │  Guest   │  Web    │  QR /   │
+                       │ TV+phone │  mobile  │ booking │ kiosk   │
                        └────┬─────┴────┬─────┴────┬────┴────┬────┘
                             │          │          │         │
                             └──────────┴────┬─────┴─────────┘
@@ -45,7 +45,7 @@ not an owner of its own copy.
         ┌───────────┬───────────┬───────────┼───────────┬───────────┬──────────┐
         │           │           │           │           │           │          │
    ┌────▼───┐  ┌────▼───┐  ┌────▼───┐  ┌────▼───┐  ┌────▼───┐  ┌────▼───┐ ┌────▼───┐
-   │identity│  │  crm   │  │booking │  │  pay   │  │ order  │  │ serve  │ │   tv   │
+   │identity│  │  crm   │  │booking │  │  pay   │  │ order  │  │ serve  │ │tv+voice│
    │ + docs │  │        │  │ + resv │  │        │  │        │  │        │ │        │
    └────┬───┘  └────┬───┘  └────┬───┘  └────┬───┘  └────┬───┘  └────┬───┘ └────┬───┘
         │           │           │           │           │           │          │
@@ -58,11 +58,11 @@ not an owner of its own copy.
                                       │
         ┌─────────────────────────────┼─────────────────────────────┐
         │                             │                             │
-   ┌────▼─────┐                 ┌─────▼──────┐               ┌──────▼──────┐
-   │ Existing │                 │  Payment   │               │   Orpheus   │
-   │   PMS    │                 │  acquirer  │               │   Nations   │
-   │(optional)│                 │  / wallet  │               │  (content)  │
-   └──────────┘                 └────────────┘               └─────────────┘
+   ┌────▼─────┐   ┌────────────┐   ┌─────▼──────┐               ┌──────▼──────┐
+   │ Existing │   │  Existing  │   │  Payment   │               │   Orpheus   │
+   │   PMS    │   │  SIP PBX   │   │  acquirer  │               │   Nations   │
+   │(optional)│   │            │   │  / wallet  │               │  (content)  │
+   └──────────┘   └────────────┘   └────────────┘               └─────────────┘
 ```
 
 **Staff surfaces** (front desk, housekeeping, kitchen display, manager dashboard) sit on the same
@@ -179,7 +179,48 @@ This module makes it the primary in-room interface.
 - Housekeeping-triggered room reset: on checkout the profile, cast pairings, watch history, and any
   cached credentials are wiped before the next guest arrives.
 
-### 3.9 `ops` — Administration and analytics
+### 3.9 `voice` — In-room telephony and staff extensions
+
+The hotel already owns a SIP PBX. This module does not replace it — it becomes a client
+of it, and gives the handset the one thing it has never had: the guest record.
+
+| Capability | Detail |
+|---|---|
+| Endpoint | SIP desk phone in the room, registered to the hotel's existing PBX |
+| Guest identity | Name and language on the handset display, set at check-in and cleared at checkout |
+| Class of service | Call barring by stay state — international opened on request, everything barred once the room is vacant |
+| Wake-up calls | One schedule, settable from the handset, the television or the desk, escalating to the desk on no answer |
+| Do not disturb | Set anywhere, honoured everywhere: handset, television and the housekeeping board |
+| Message waiting | Indicator driven by `serve` messages, so the lamp and the television agree |
+| Room-to-room | Guests dial a room number; the platform maps it to the current extension |
+| Call charging | Call detail records collected from the PBX, rated, and posted as folio lines |
+| Staff extensions | The Android handhelds housekeeping and maintenance already carry register as extensions on the same PBX |
+| Emergency calling | Direct dial with no prefix, simultaneous on-site notification, dispatchable location per room |
+
+**What we need from the PBX**, and the thing to establish per vendor before quoting:
+
+1. **Endpoint registration or provisioning** — the ability to register handsets, or to push
+   per-extension configuration (display name, class of service) as guests come and go.
+2. **A call detail record feed** — file drop, database, or API. Without CDRs there is no
+   call billing, only dial tone.
+3. **A control interface** for wake-ups, DND and message-waiting, if those are to live in
+   the PBX rather than in the platform.
+
+Where a PBX exposes only a legacy hospitality link (a serial or socket protocol built for
+a 1990s PMS), the platform speaks it rather than asking the hotel to replace the PBX — but
+that is integration work to be scoped, not assumed.
+
+**Emergency calling is a legal obligation, not a feature.** Several markets require that an
+emergency number be reachable with no prefix from any handset, that someone on site is
+notified when it is dialled, and that the location passed to the emergency service is precise
+enough to find the room. Verify a property's current telephony against the rules of its own
+market at survey — the answer is often that the existing setup does not comply, which makes
+this module easier to justify rather than harder.
+
+Older rooms with analogue handsets bridge to the same PBX through an analogue terminal
+adapter. A room does not have to be rewired to join the platform.
+
+### 3.10 `ops` — Administration and analytics
 
 - Single operational dashboard across every module, with role-based access control.
 - Multi-property: a group sees the estate, a property sees itself, staff see their function.
@@ -284,13 +325,15 @@ FolioLine    id, folio_id, source_module, outlet_id, description, amount, tax, p
 Order        id, stay_id | table_id, outlet_id, items[], status, folio_line_id
 Request      id, stay_id, type, priority, sla_due_at, assignee_id, status, events[]
 ResvSlot     id, resource_id, starts_at, capacity, consumed
+CallRecord   id, stay_id, extension, dialled, direction, started_at, seconds, rate, folio_line_id
 Device       id, property_id, room_id, platform, app_version, last_seen, health
 ```
 
 Two rules that keep the model honest:
 
 - **`FolioLine` is the universal revenue primitive.** Every module that can charge money produces
-  folio lines and nothing else. There is exactly one path from a charge to the guest's bill.
+  folio lines and nothing else. There is exactly one path from a charge to the guest's bill —
+  a rated call reaches the guest's bill by exactly the same route as a club sandwich.
 - **The event log is append-only and authoritative for state changes.** Module datastores are
   projections. This is what makes the audit trail credible to a compliance reviewer and what lets
   a module rebuild after failure.
@@ -319,7 +362,7 @@ big-bang launch.
 | 1 | `identity` + `crm` + document vault | The guest record is the spine; nothing else is coherent without it |
 | 2 | `pay` + folio, `order` for one outlet | Proves the universal charge path on a small blast radius |
 | 3 | `tv` guest app on Android TV | Highest visible impact; needs phases 1–2 to be worth anything |
-| 4 | `serve` + `resv` | Operational depth once the guest-facing surfaces exist |
+| 4 | `serve` + `resv` + `voice` | Operational depth once the guest-facing surfaces exist; voice needs `pay` in place before calls can be charged |
 | 5 | `booking` + distribution | Largest integration surface, most valuable once the rest is proven |
 | 6 | `ops` analytics, multi-property | Meaningful only once real data is flowing |
 
@@ -339,3 +382,8 @@ Items that need a decision or an answer from outside this document before build 
 4. **Target markets**, which determine statutory guest-register reporting, tax and receipt rules,
    and the payment methods that must be supported at launch.
 5. **Payment acquirer and wallet partners**, per market.
+6. **PBX vendor and version per property**, which decides how endpoints are provisioned, how
+   call records are collected, and whether wake-ups and message-waiting live in the PBX or in
+   the platform. Assume nothing generic here.
+7. **Emergency calling rules per market**, and whether each property's current telephony
+   already meets them.

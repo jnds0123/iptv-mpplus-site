@@ -29,9 +29,17 @@ natively on the set with no box behind it.
 
 Every device in the property runs Android — the television, the point-of-sale tablets,
 the kitchen display, the housekeeping handhelds, the identity scanner and the lobby
-kiosk. One codebase, one device-management enrolment, commodity hardware. The one
-exception is the guest's own phone, which is served as a web page, because no guest
-installs an app for a two-night stay.
+kiosk. One codebase, one device-management enrolment, commodity hardware. Two deliberate
+exceptions: the guest's own phone, served as a web page because no guest installs an app
+for a two-night stay, and the handset beside the bed, which is a standard SIP endpoint
+registered to the hotel's existing PBX.
+
+Telephony is integrated, not replaced. The platform gives the handset the guest record —
+name on the display, class of service by stay state, wake-up calls, do-not-disturb that
+the television and the housekeeping board both honour — and posts rated call records to
+the same folio as dinner and the minibar. The Android handhelds housekeeping already
+carry register as extensions on that same PBX, which removes the case for a separate
+DECT fleet.
 
 ## Rebuilding the deck
 

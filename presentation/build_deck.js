@@ -213,30 +213,30 @@ function footnote(s, text, dark) {
   card(s, M, 2.28, CW, 1.0, false, "0B1220");
   s.addText("YOURS — ENTERPRISE, UNCHANGED", { isTextBox: true, x: M + 0.32, y: 2.42, w: 4.2, h: 0.26, margin: 0,
     fontFace: SANS, fontSize: 10, bold: true, charSpacing: 1.6, color: GOLD });
-  ["Central reservations", "Property management system", "Enterprise loyalty", "Corporate finance", "Identity / SSO"].forEach((t, i) => {
-    const x = M + 0.32 + i * 2.34;
-    s.addShape(pres.ShapeType.roundRect, { x, y: 2.74, w: 2.2, h: 0.4, rectRadius: 0.2,
+  ["Central reservations", "Property management", "Enterprise loyalty", "SIP PBX", "Corporate finance", "Identity / SSO"].forEach((t, i) => {
+    const x = M + 0.32 + i * 1.88;
+    s.addShape(pres.ShapeType.roundRect, { x, y: 2.74, w: 1.78, h: 0.4, rectRadius: 0.2,
       fill: { color: "1C2942" }, line: { color: INK_LINE, width: 1 } });
-    s.addText(t, { isTextBox: true, x, y: 2.74, w: 2.2, h: 0.4, margin: 0,
-      fontFace: SANS, fontSize: 9.5, bold: true, color: CREAM, align: "center", valign: "middle" });
+    s.addText(t, { isTextBox: true, x, y: 2.74, w: 1.78, h: 0.4, margin: 0,
+      fontFace: SANS, fontSize: 9, bold: true, color: CREAM, align: "center", valign: "middle" });
   });
 
   [1.9, 11.5].forEach(x => s.addShape(pres.ShapeType.line, { x, y: 3.32, w: 0, h: 0.3,
     line: { color: GOLD_DEEP, width: 1.5, beginArrowType: "triangle", endArrowType: "triangle" } }));
-  s.addText("guest & stay sync  ·  folio posting  ·  loyalty accrual  ·  single sign-on", { isTextBox: true,
+  s.addText("guest & stay sync  ·  folio posting  ·  loyalty accrual  ·  call records  ·  single sign-on", { isTextBox: true,
     x: M, y: 3.35, w: CW, h: 0.26, margin: 0, fontFace: SANS, fontSize: 9.5, italic: true, color: GOLD_DEEP, align: "center" });
 
   // band 2 — ours
   card(s, M, 3.7, CW, 1.35, false, "FBF6E9");
   s.addText("OURS — THE PROPERTY GUEST LAYER", { isTextBox: true, x: M + 0.32, y: 3.84, w: 4.4, h: 0.26, margin: 0,
     fontFace: SANS, fontSize: 10, bold: true, charSpacing: 1.6, color: GOLD_DEEP });
-  const mods = ["Identity\n& documents", "Guest\nprofile", "Facility\nreservations", "Payments\n& folio", "Ordering\nF&B", "Concierge\n& service", "Entertainment\n& TV", "Operations\n& analytics"];
+  const mods = ["Identity\n& docs", "Guest\nprofile", "Direct\nbooking", "Facility\nbookings", "Payments\n& folio", "Ordering\nF&B", "Concierge\n& service", "Voice\n& PBX", "Entertainment\n& TV", "Operations\n& data"];
   mods.forEach((t, i) => {
-    const x = M + 0.32 + i * 1.445;
-    s.addShape(pres.ShapeType.roundRect, { x, y: 4.16, w: 1.36, h: 0.72, rectRadius: 0.08,
+    const x = M + 0.32 + i * 1.129;
+    s.addShape(pres.ShapeType.roundRect, { x, y: 4.16, w: 1.07, h: 0.72, rectRadius: 0.08,
       fill: { color: WHITE }, line: { color: GOLD_DEEP, width: 1 } });
-    s.addText(t, { isTextBox: true, x: x + 0.04, y: 4.16, w: 1.28, h: 0.72, margin: 0,
-      fontFace: SANS, fontSize: 9, bold: true, color: INK, align: "center", valign: "middle", lineSpacing: 11 });
+    s.addText(t, { isTextBox: true, x: x + 0.01, y: 4.16, w: 1.05, h: 0.72, margin: 0,
+      fontFace: SANS, fontSize: 8, bold: true, color: INK, align: "center", valign: "middle", lineSpacing: 10 });
   });
 
   [1.9, 6.67, 11.5].forEach(x => s.addShape(pres.ShapeType.line, { x, y: 5.09, w: 0, h: 0.28,
@@ -246,14 +246,14 @@ function footnote(s, text, dark) {
   card(s, M, 5.45, CW, 0.95, false);
   s.addText("SURFACES", { isTextBox: true, x: M + 0.32, y: 5.57, w: 2.0, h: 0.26, margin: 0,
     fontFace: SANS, fontSize: 10, bold: true, charSpacing: 1.6, color: MUTED_L });
-  ["In-room TV", "Guest mobile", "QR on site", "Front desk", "Kitchen display", "Housekeeping", "Manager view"].forEach((t, i) => {
-    const x = M + 2.5 + i * 1.34;
-    s.addText(t, { isTextBox: true, x, y: 5.55, w: 1.3, h: 0.28, margin: 0,
-      fontFace: SANS, fontSize: 9.5, bold: true, color: INK, align: "center" });
+  ["In-room TV", "In-room phone", "Guest mobile", "QR on site", "Front desk", "Kitchen display", "Housekeeping", "Manager view"].forEach((t, i) => {
+    const x = M + 2.2 + i * 1.216;
+    s.addText(t, { isTextBox: true, x, y: 5.55, w: 1.18, h: 0.28, margin: 0,
+      fontFace: SANS, fontSize: 9, bold: true, color: INK, align: "center" });
   });
-  s.addText("guest-facing", { isTextBox: true, x: M + 2.5, y: 5.98, w: 4.0, h: 0.24, margin: 0,
+  s.addText("guest-facing", { isTextBox: true, x: M + 2.2, y: 5.98, w: 4.86, h: 0.24, margin: 0,
     fontFace: SANS, fontSize: 9, italic: true, color: MUTED_L, align: "center" });
-  s.addText("staff-facing", { isTextBox: true, x: M + 6.5, y: 5.98, w: 5.3, h: 0.24, margin: 0,
+  s.addText("staff-facing", { isTextBox: true, x: M + 7.06, y: 5.98, w: 4.86, h: 0.24, margin: 0,
     fontFace: SANS, fontSize: 9, italic: true, color: MUTED_L, align: "center" });
   footnote(s, "Integration is scoped per PMS and per loyalty platform. We do not promise a generic connector — the interface is agreed before the pilot.", false);
   s.addNotes("This is the slide the group's IT function will test you on. The honest position — scoped per vendor, agreed before pilot, no generic connector — is what separates a credible integration story from a slideware one.");
@@ -262,33 +262,34 @@ function footnote(s, text, dark) {
 /* ================================================ 6. MODULES */
 {
   const s = lightSlide();
-  slideTitle(s, "Nine modules, one platform", false, "at a glance");
+  slideTitle(s, "Ten modules, one platform", false, "at a glance");
   const mods = [
-    ["ID", "Identity & Documents", "Scanning, OCR, e-signature, secure vault, statutory guest register"],
-    ["CR", "Guest Profile", "Preferences, allergies, stay and spend history, consent ledger"],
-    ["BK", "Booking", "Direct engine where you need one; pre-arrival upsell on every reservation"],
-    ["RV", "Reservations", "Tables, spa, gym, function rooms, tours, transfers"],
-    ["PY", "Payments & Folio", "Cards, wallets, room charge, split billing, settlement"],
-    ["OR", "Ordering", "Restaurant, bar, in-room dining, QR, kitchen display"],
-    ["SV", "Concierge & Service", "Requests, SLA ticketing, housekeeping, maintenance, chat"],
-    ["TV", "Entertainment", "Guest TV application, live and on-demand, Orpheus Nations, casting"],
-    ["OP", "Operations", "Property and estate dashboards, RBAC, multi-property, audit"],
+    ["ID", "Identity & Documents", "Scanning, OCR, e-signature, secure vault"],
+    ["CR", "Guest Profile", "Preferences, allergies, history, consent"],
+    ["BK", "Booking", "Direct engine, pre-arrival upsell"],
+    ["RV", "Reservations", "Tables, spa, function rooms, tours"],
+    ["PY", "Payments & Folio", "Cards, wallets, room charge, settlement"],
+    ["OR", "Ordering", "Restaurant, bar, in-room dining, kitchen display"],
+    ["SV", "Concierge & Service", "Requests, SLA ticketing, housekeeping"],
+    ["TV", "Entertainment", "Guest TV app, live and on-demand, casting"],
+    ["VO", "Voice", "In-room SIP phone, wake-ups, call posting"],
+    ["OP", "Operations", "Dashboards, analytics, RBAC, audit"],
   ];
-  const cw = 3.75, ch = 1.28, gx = 0.44, gy = 0.24;
+  const cw = 2.146, ch = 2.0, gx = 0.3, gy = 0.26;
   mods.forEach((m, i) => {
-    const col = i % 3, row = Math.floor(i / 3);
-    const x = M + col * (cw + gx), y = 1.72 + row * (ch + gy);
-    card(s, x, y, cw, ch, false);
-    badge(s, x + 0.26, y + 0.26, m[0], false, 0.46);
-    s.addText(m[1], { isTextBox: true, x: x + 0.85, y: y + 0.24, w: cw - 1.1, h: 0.3, margin: 0,
-      fontFace: SANS, fontSize: 13.5, bold: true, color: INK });
-    s.addText(m[2], { isTextBox: true, x: x + 0.85, y: y + 0.58, w: cw - 1.1, h: 0.62, margin: 0,
-      fontFace: SANS, fontSize: 10.5, color: MUTED_L, lineSpacing: 14 });
+    const col = i % 5, row = Math.floor(i / 5);
+    const x = M + col * (cw + gx), y = 1.85 + row * (ch + gy);
+    card(s, x, y, cw, ch, false, m[0] === "VO" ? "FBF6E9" : PAPER);
+    badge(s, x + 0.22, y + 0.22, m[0], false, 0.44);
+    s.addText(m[1], { isTextBox: true, x: x + 0.22, y: y + 0.78, w: cw - 0.44, h: 0.54, margin: 0,
+      fontFace: SANS, fontSize: 12.5, bold: true, color: INK, lineSpacing: 15 });
+    s.addText(m[2], { isTextBox: true, x: x + 0.22, y: y + 1.32, w: cw - 0.44, h: 0.58, margin: 0,
+      fontFace: SANS, fontSize: 9.5, color: MUTED_L, lineSpacing: 12.5 });
   });
   s.addText("Adopted as a whole, or module by module against the gaps in a given property — the guest record is shared from the first one.",
-    { isTextBox: true, x: M, y: 6.3, w: CW, h: 0.35, margin: 0,
+    { isTextBox: true, x: M, y: 6.35, w: CW, h: 0.35, margin: 0,
       fontFace: SANS, fontSize: 12, italic: true, color: GOLD_DEEP, align: "center" });
-  s.addNotes("For a mixed estate the module-by-module point matters: a managed property with a strong incumbent POS can take everything except ordering, and still share the guest record.");
+  s.addNotes("Voice is the newest module and the easiest sell to a property that already runs a PBX: it is the only one that adds a guest-facing device without adding a platform, because the handset registers to the SIP system they already own.");
 }
 
 /* ================================================ 7. GUEST JOURNEY */
@@ -560,9 +561,9 @@ function footnote(s, text, dark) {
     fill: { color: TEAL, transparency: 91 }, line: { color: TEAL, transparency: 80, width: 1 } });
   s.addText("02", { isTextBox: true, x: M, y: 2.25, w: 2, h: 0.9, margin: 0,
     fontFace: SERIF, fontSize: 60, bold: true, color: GOLD });
-  s.addText("The screen in the room", { isTextBox: true, x: M, y: 3.25, w: 8.4, h: 0.85, margin: 0,
+  s.addText("The devices in the room", { isTextBox: true, x: M, y: 3.25, w: 8.4, h: 0.85, margin: 0,
     fontFace: SERIF, fontSize: 40, bold: true, color: CREAM });
-  s.addText("The highest-dwell-time surface in the room, procured locally in most estates,\nand the least consistent thing a returning guest encounters.",
+  s.addText("The two things a guest touches once the door closes: the screen on the wall and\nthe handset beside the bed. Both bought locally in most estates. Both ours to fix.",
     { isTextBox: true, x: M, y: 4.2, w: 8.4, h: 0.9, margin: 0,
       fontFace: SANS, fontSize: 14, color: MUTED_D, lineSpacing: 22 });
   s.addNotes("Transition into the entertainment story. The framing for a group is consistency, not novelty.");
@@ -650,7 +651,7 @@ function footnote(s, text, dark) {
 {
   const s = lightSlide();
   slideTitle(s, "One Android app. Every screen.", false, "android, end to end");
-  body(s, "Every surface in the property runs Android — the television in the room, the tablets on the floor, the handhelds in the corridor, the kiosk in the lobby. One application, one release train, one way to manage a device.",
+  body(s, "Every device that runs our application runs Android — the television in the room, the tablets on the floor, the handhelds in the corridor, the kiosk in the lobby. One application, one release train, one way to manage a device.",
     M, 1.72, 11.4, 0.62, false, 13);
 
   const est = [
@@ -683,7 +684,7 @@ function footnote(s, text, dark) {
     { isTextBox: true, x: M + 6.3, y: 5.28, w: 5.3, h: 0.85, margin: 0,
       fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
 
-  footnote(s, "Samsung Tizen and LG webOS sets are not native Android targets. Those properties run the same application on a small Android device until the televisions refresh.", false);
+  footnote(s, "The in-room handset is the one exception — a standard SIP endpoint on your own PBX, not an Android device. Samsung Tizen and LG webOS sets are not native Android targets either; those properties run the same application on a small Android device until the televisions refresh.", false);
   s.addNotes("Committing to Android is a strength, not a limitation — say it that way. One codebase instead of four, one MDM enrolment, and hardware the group can buy in any market. The cost is honest and on the slide: a Samsung or LG estate needs a small Android device until refresh, so establish early which sets a given property actually has.");
 }
 
@@ -714,6 +715,46 @@ function footnote(s, text, dark) {
     { isTextBox: true, x: M + 0.35, y: 5.05, w: CW - 0.7, h: 0.85, margin: 0,
       fontFace: SANS, fontSize: 13, italic: true, color: GOLD, valign: "middle" });
   s.addNotes("PLACEHOLDER — replace these four cards with the real Orpheus Nations catalogue, channel line-up and licensed territories before this deck goes to a client. Content specifics were not available when the deck was drafted.");
+}
+
+/* ================================================ 19b. VOICE */
+{
+  const s = lightSlide();
+  slideTitle(s, "The phone beside the bed", false, "voice");
+  body(s, "The SIP handset registers to the PBX you already run. We do not replace your telephony — we give the handset the guest record, and we put the calls on the folio.",
+    M, 1.72, 10.8, 0.62, false, 13.5);
+
+  const items = [
+    ["Your PBX, unchanged", "The handset registers to your existing SIP platform. No forklift, no new call path, no carrier contract to renegotiate.", true],
+    ["It knows who is in the room", "The display carries the guest's name and language. Dial 0 and the desk sees the profile before the call is answered.", false],
+    ["Wake-up calls that work", "Set from the handset, the television or the desk — one schedule, escalating to the desk if the guest does not answer.", false],
+    ["Calls on the folio", "Call records priced and posted to the same folio as dinner and the minibar, through the same interface as every other outlet.", false],
+  ];
+  const cw = 2.92, gx = 0.31;
+  items.forEach((it, i) => {
+    const x = M + i * (cw + gx);
+    card(s, x, 2.5, cw, 2.3, false, it[2] ? "FBF6E9" : PAPER);
+    badge(s, x + 0.24, 2.72, String(i + 1), false, 0.44);
+    s.addText(it[0], { isTextBox: true, x: x + 0.24, y: 3.28, w: cw - 0.48, h: 0.56, margin: 0,
+      fontFace: SANS, fontSize: 13, bold: true, color: INK, lineSpacing: 16 });
+    s.addText(it[1], { isTextBox: true, x: x + 0.24, y: 3.86, w: cw - 0.48, h: 0.86, margin: 0,
+      fontFace: SANS, fontSize: 10.5, color: MUTED_L, lineSpacing: 14 });
+  });
+
+  card(s, M, 5.0, CW, 1.35, false, "0B1220");
+  s.addText("Staff carry extensions, not radios", { isTextBox: true, x: M + 0.35, y: 5.18, w: 5.2, h: 0.28, margin: 0,
+    fontFace: SANS, fontSize: 12, bold: true, color: GOLD });
+  s.addText("The same PBX rings the Android handhelds housekeeping and maintenance already carry. One numbering plan, no separate DECT fleet to buy or maintain, and a service ticket that can call the guest back.",
+    { isTextBox: true, x: M + 0.35, y: 5.5, w: 5.3, h: 0.7, margin: 0,
+      fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
+  s.addText("Emergency calling, verified", { isTextBox: true, x: M + 6.3, y: 5.18, w: 5.2, h: 0.28, margin: 0,
+    fontFace: SANS, fontSize: 12, bold: true, color: GOLD });
+  s.addText("Direct emergency dialling with no prefix, simultaneous notification to the front desk, and a dispatchable location for every room — checked at survey against the rules of each market you operate in.",
+    { isTextBox: true, x: M + 6.3, y: 5.5, w: 5.3, h: 0.7, margin: 0,
+      fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
+
+  footnote(s, "Analogue handsets in older rooms bridge to the same PBX through an adapter — a room does not have to be rewired to join the platform.", false);
+  s.addNotes("Two things to lead with in the room. First, this is the cheapest module to say yes to: the PBX, the handsets and the numbering plan already exist, so the work is integration rather than replacement. Second, emergency calling — direct dial with no prefix, desk notification and a per-room dispatchable location are legal requirements in several markets and are the fastest way to find out whether a property's current telephony is actually compliant.");
 }
 
 /* ================================================ 20. OWNER vs OPERATOR */
