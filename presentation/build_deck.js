@@ -684,7 +684,7 @@ function footnote(s, text, dark) {
     { isTextBox: true, x: M + 6.3, y: 5.28, w: 5.3, h: 0.85, margin: 0,
       fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
 
-  footnote(s, "The in-room handset is the one exception — a standard SIP endpoint on your own PBX, not an Android device. Samsung Tizen and LG webOS sets are not native Android targets either; those properties run the same application on a small Android device until the televisions refresh.", false);
+  footnote(s, "The in-room handset is the exception — a SIP endpoint on your own PBX. Tizen and webOS sets are not native Android targets, and run the app on a small device until refresh.", false);
   s.addNotes("Committing to Android is a strength, not a limitation — say it that way. One codebase instead of four, one MDM enrolment, and hardware the group can buy in any market. The cost is honest and on the slide: a Samsung or LG estate needs a small Android device until refresh, so establish early which sets a given property actually has.");
 }
 
@@ -793,15 +793,15 @@ function footnote(s, text, dark) {
 {
   const s = lightSlide();
   slideTitle(s, "Where the platform pays for itself", false, "the commercial case");
-  body(s, "Five effects, each measurable on a property P&L and each multiplying by the number of properties. The chart is a worked model — we rebuild it on the group's real figures before proposal.",
+  body(s, "Six effects, each measurable on a property P&L and each multiplying by the number of properties. The chart is a worked model — we rebuild it on the group's real figures before proposal.",
     M, 1.7, 10.8, 0.6, false, 13);
 
   s.addChart(pres.ChartType.bar, [{
     name: "Annual effect per property",
     labels: ["Ancillary revenue\n(dining, spa and tours from the TV)", "Vendor contracts consolidated\n(TV, POS, concierge tooling)",
              "Labour hours returned\n(desk, outlets, night audit)", "Set-top hardware avoided\n(at TV refresh)",
-             "Direct booking\n(where the property runs its own)"],
-    values: [1.00, 0.54, 0.47, 0.33, 0.29],
+             "Direct booking\n(where the property runs its own)", "Radio and DECT fleet avoided\n(staff handhelds are extensions)"],
+    values: [1.00, 0.54, 0.47, 0.33, 0.29, 0.19],
   }], {
     x: M, y: 2.48, w: 7.5, h: 3.4,
     barDir: "bar", chartColors: [GOLD_DEEP],
@@ -815,11 +815,11 @@ function footnote(s, text, dark) {
   card(s, M + 7.9, 2.48, CW - 7.9, 3.4, false, "0B1220");
   s.addText("How to read this", { isTextBox: true, x: M + 8.25, y: 2.72, w: 3.6, h: 0.3, margin: 0,
     fontFace: SANS, fontSize: 13, bold: true, color: GOLD });
-  s.addText("Bars are relative, not absolute. Ancillary revenue is set to 1.0 and the rest scaled against it.\n\nThe middle three bars are cost, not revenue — contracts not renewed, hours not worked, hardware not bought. They are the least visible effects and usually the most certain.\n\nAt estate scale the multiplier matters more than the per-property figure: a modest, reliable effect across two hundred properties outweighs an optimistic one across ten.",
+  s.addText("Bars are relative, not absolute. Ancillary revenue is set to 1.0 and the rest scaled against it.\n\nOnly two bars are revenue. The rest are cost — contracts not renewed, hours not worked, hardware not bought. They are the least visible effects and usually the most certain.\n\nCall revenue is deliberately absent: guests use their own mobiles, and telephony earns its place here on cost and compliance, not on billed minutes.",
     { isTextBox: true, x: M + 8.25, y: 3.1, w: 3.65, h: 2.6, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: MUTED_D, lineSpacing: 14.5 });
   footnote(s, "Illustrative model only. No client figures have been used. Rebuilt on the group's own outlet revenue, vendor spend, payroll and capex plan at proposal stage.", false);
-  s.addNotes("Say the caveat out loud. For an enterprise buyer, offering to rebuild the model on their numbers during the systems audit is the ask that converts this meeting into a second one.");
+  s.addNotes("Say the caveat out loud. For an enterprise buyer, offering to rebuild the model on their numbers during the systems audit is the ask that converts this meeting into a second one. If someone asks why call revenue is not a bar: it has been falling for twenty years and pretending otherwise costs you credibility on every other bar.");
 }
 
 /* ================================================ 22. ENTERPRISE READINESS */
