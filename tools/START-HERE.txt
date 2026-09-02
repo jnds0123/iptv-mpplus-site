@@ -35,10 +35,14 @@ RUNNING THE DEMO
 
   Open Demo/index.html. Three tabs across the top:
 
-    Guest television   Drive it with the arrow keys, Enter and
-                       Backspace — the four buttons a hotel
-                       remote has. Order dinner from the Order
-                       screen.
+    Guest television   Built in the Orpheus Nations interface —
+                       the same rail, featured cards and poster
+                       rows as the website. Drive it with the
+                       arrow keys, Enter and Backspace, the four
+                       buttons a hotel remote has. Entertainment
+                       sits above the divider in the menu, your
+                       stay below it: order dinner from Dining,
+                       book the spa from Reservations.
 
     Pre-arrival        The guest's own phone. Scan the passport,
                        check the parsed details, sign with the
