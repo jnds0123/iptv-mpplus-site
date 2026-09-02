@@ -1,0 +1,87 @@
+HOSPITALITY SOLUTIONS SUITE
+Handover folder
+===============================================================
+
+WHAT IS IN HERE
+
+  Hospitality Solutions Deck.pptx
+      The 25-slide pitch, for hotel owners and operators. Every
+      slide carries speaker notes — open the Notes pane before
+      presenting, the argument for each slide is written there.
+
+  Hospitality Solutions Deck.pdf
+      The same deck, for sending ahead of a meeting.
+
+  Platform Architecture.pdf
+      The technical specification. Ten modules, the data model,
+      the Android device strategy, PBX integration, and the
+      phased build sequence.
+
+  Overview.pdf
+      Short summary of the whole package.
+
+  Demo/index.html
+      A working prototype. Double-click to open in any browser —
+      no install, no internet needed.
+
+  Source/
+      The editable originals. build_deck.js generates the
+      PowerPoint; edit that rather than the .pptx so the deck
+      can be rebuilt cleanly.
+
+---------------------------------------------------------------
+
+RUNNING THE DEMO
+
+  Open Demo/index.html. Three tabs across the top:
+
+    Guest television   Drive it with the arrow keys, Enter and
+                       Backspace — the four buttons a hotel
+                       remote has. Order dinner from the Order
+                       screen.
+
+    Pre-arrival        The guest's own phone. Scan the passport,
+                       check the parsed details, sign with the
+                       mouse.
+
+    Hotel console      Everything the staff see.
+
+  The point is the cross-link. Do something on a guest screen,
+  then open the Hotel console: the kitchen order, the service
+  ticket, the folio line and the signed documents are already
+  there, because one guest record sits behind every screen.
+  That is the argument the whole deck is making.
+
+---------------------------------------------------------------
+
+BEFORE THIS GOES TO A CLIENT
+
+  Four things are deliberately marked rather than invented.
+
+  1. Orpheus Nations content. The catalogue, channel line-up
+     and licensed territories on the entertainment slide are
+     placeholders. The site was not reachable when this was
+     built.
+
+  2. The commercial model. The chart is relative and
+     illustrative — no client figures are in it. Rebuild it on
+     the group's own outlet revenue, vendor spend, payroll and
+     capex plan.
+
+  3. Certification. SOC 2 and the penetration test are stated
+     as commitments with a date, NOT as credentials already
+     held. Correct anyone who reads it the other way.
+
+  4. PBX and PMS integration is scoped per vendor. The deck
+     deliberately promises no generic connector.
+
+  Two constraints worth raising yourself before a client's IT
+  raises them:
+
+  - Samsung Tizen and LG webOS televisions cannot run the
+    Android app natively. Those properties need a small Android
+    device behind the set until the televisions refresh.
+
+  - "No set-top box" holds on hospitality-model Android
+    televisions, which permit managed install and lockdown.
+    Consumer models generally do not.
