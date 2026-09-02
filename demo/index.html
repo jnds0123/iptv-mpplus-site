@@ -37,10 +37,12 @@
   --crit:#E0716A; --crit-soft:#2A1312;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.32);
 }
-/* ---------- tokens: the television (a screen — one fixed world) ---------- */
+/* ---------- tokens: the television, in the Orpheus interface ---------- */
 :root{
-  --tv-ground:#070B12; --tv-panel:#111B2B; --tv-panel-2:#18253A;
-  --tv-line:#1F2E45; --tv-gold:#D8B25A; --tv-cream:#F2EEE4; --tv-muted:#8A9AB4;
+  --o-bg:#0A0613; --o-rail-a:#130C22; --o-rail-b:#0B0715; --o-card:#150E28;
+  --o-line:#241A3D; --o-line-2:#2E2150; --o-active:#231640; --o-focus:#C77BFF;
+  --o-purple:#A855F7; --o-magenta:#E040FB; --o-pink:#EC4899;
+  --o-text:#F4F1FA; --o-mute:#9C93B8; --o-dim:#6B6088;
 }
 
 *{box-sizing:border-box}
@@ -55,7 +57,7 @@ button{font:inherit; color:inherit; background:none; border:none; cursor:pointer
 .mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
 
 /* ---------- shell ---------- */
-.wrap{max-width:1180px; margin:0 auto; padding:22px 20px 56px}
+.wrap{max-width:1300px; margin:0 auto; padding:22px 20px 56px}
 .masthead{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between; margin-bottom:18px}
 .brand h1{font-family:"Newsreader",Georgia,serif; font-size:27px; font-weight:600; letter-spacing:-.01em}
 .brand p{margin:4px 0 0; color:var(--ink-3); font-size:12.5px; max-width:60ch}
@@ -71,72 +73,110 @@ button{font:inherit; color:inherit; background:none; border:none; cursor:pointer
 .hint b{color:var(--ink)}
 .hint svg{flex:none; margin-top:1px; color:var(--accent)}
 
-/* ---------- television ---------- */
-.stage{display:grid; grid-template-columns:minmax(0,1fr) 232px; gap:20px; align-items:start}
+/* ---------- television: the Orpheus interface ---------- */
+.stage{display:grid; grid-template-columns:minmax(0,1fr) 208px; gap:18px; align-items:start}
 @media (max-width:900px){ .stage{grid-template-columns:1fr} }
-.bezel{
-  background:#05080D; border:1px solid var(--line); border-radius:14px; padding:11px;
-  box-shadow:var(--shadow);
-}
-.screen{
-  position:relative; aspect-ratio:16/9; background:var(--tv-ground); border-radius:7px;
-  overflow:hidden; color:var(--tv-cream); container-type:inline-size;
-}
-.screen-pad{position:absolute; inset:0; padding:3.1cqw 3.6cqw; display:flex; flex-direction:column}
-.tv-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:2.4cqw}
-.tv-hello{font-family:"Newsreader",Georgia,serif; font-size:3.5cqw; font-weight:500; line-height:1.15}
-.tv-sub{margin-top:.7cqw; font-size:1.45cqw; color:var(--tv-muted); letter-spacing:.01em}
-.tv-chip{
-  flex:none; background:var(--tv-gold); color:#1A1305; font-weight:700;
-  font-size:1.25cqw; padding:.6cqw 1.1cqw; border-radius:99px;
-}
-.tv-back{
-  font-size:1.35cqw; color:var(--tv-muted); display:inline-flex; align-items:center; gap:.5cqw;
-  padding:.5cqw .9cqw; border-radius:99px; border:1px solid var(--tv-line);
-}
-.tiles{display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr); gap:1.5cqw; height:100%}
-.tile{
-  background:var(--tv-panel); border:1px solid var(--tv-line); border-radius:.9cqw;
-  padding:1.6cqw; text-align:left; display:flex; flex-direction:column; justify-content:flex-end; gap:.45cqw;
-  transition:transform .12s ease, border-color .12s ease, background .12s ease;
-}
-.tile b{font-size:2cqw; font-weight:600; letter-spacing:-.01em}
-.tile span{font-size:1.3cqw; color:var(--tv-muted); line-height:1.35}
-.tile svg{width:2.3cqw; height:2.3cqw; color:var(--tv-gold); margin-bottom:auto}
-.f{cursor:pointer}
-.f.on{
-  background:var(--tv-panel-2); border-color:var(--tv-gold);
-  box-shadow:0 0 0 .22cqw rgba(216,178,90,.28); transform:translateY(-.15cqw);
-}
-.tv-body{flex:1; min-height:0; overflow-y:auto; scrollbar-width:none; display:flex; flex-direction:column}
-.tv-body::-webkit-scrollbar{display:none}
-.rowlab{font-size:1.25cqw; text-transform:uppercase; letter-spacing:.14em; color:var(--tv-gold); margin:0 0 1cqw}
-.rail{display:grid; grid-template-columns:repeat(5,1fr); gap:1.1cqw; margin-bottom:1.8cqw}
-.art{
-  aspect-ratio:2/3; border-radius:.6cqw; border:1px solid var(--tv-line);
-  display:flex; align-items:flex-end; padding:.8cqw; font-size:1.15cqw; font-weight:600;
-  line-height:1.25; text-shadow:0 1px 6px rgba(0,0,0,.8);
-}
-.list{display:flex; flex-direction:column; gap:.85cqw}
-.li{
-  display:flex; align-items:center; gap:1.1cqw; padding:1.05cqw 1.3cqw;
-  background:var(--tv-panel); border:1px solid var(--tv-line); border-radius:.65cqw; text-align:left;
-}
-.li b{font-size:1.6cqw; font-weight:600}
-.li small{display:block; font-size:1.2cqw; color:var(--tv-muted); margin-top:.15cqw; font-weight:400}
-.li .amt{margin-left:auto; font-size:1.5cqw; color:var(--tv-gold); font-weight:600}
-.folio-row{display:flex; gap:1.1cqw; padding:.75cqw 0; border-bottom:1px solid var(--tv-line); font-size:1.4cqw}
-.folio-row .amt{margin-left:auto; color:var(--tv-cream)}
-.folio-row small{color:var(--tv-muted); font-size:1.15cqw}
-.folio-total{display:flex; margin-top:1.1cqw; font-size:2cqw; font-weight:600; color:var(--tv-gold)}
+.bezel{background:#05030A; border:1px solid var(--line); border-radius:14px; padding:11px; box-shadow:var(--shadow)}
+.screen{position:relative; aspect-ratio:16/9; background:var(--o-bg); border-radius:7px;
+  overflow:hidden; color:var(--o-text); container-type:inline-size}
+.tvroot{position:absolute; inset:0; display:flex}
+
+/* left rail */
+.tvrail{width:19.5cqw; flex:none; display:flex; flex-direction:column; gap:.3cqw;
+  padding:1.5cqw 1cqw; background:linear-gradient(180deg,var(--o-rail-a),var(--o-rail-b));
+  border-right:1px solid var(--o-line); overflow:hidden}
+.brand{display:flex; align-items:center; gap:.75cqw; padding:.1cqw .5cqw 1.3cqw}
+.orb{width:2.5cqw; height:2.5cqw; flex:none; border-radius:99px; display:grid; place-items:center;
+  background:radial-gradient(circle at 34% 28%,#5A3494,#1A0F2E 70%); border:1px solid #402A6B;
+  box-shadow:0 0 1.4cqw rgba(150,80,255,.35)}
+.orb span{width:1.15cqw; height:.42cqw; border-radius:99px; background:#9C86CF}
+.brand b{font-size:1.95cqw; font-weight:800; letter-spacing:-.02em;
+  background:linear-gradient(90deg,#B06BFF,#F05CE0); -webkit-background-clip:text; background-clip:text; color:transparent}
+.navi{display:flex; align-items:center; gap:.7cqw; padding:.6cqw .7cqw; border-radius:.45cqw;
+  color:#A79CC4; font-size:1.2cqw; font-weight:600; line-height:1.2; text-align:left; width:100%}
+.navi svg{width:1.3cqw; height:1.3cqw; flex:none; opacity:.85}
+.navi.cur{background:var(--o-active); color:#fff}
+.navi.cur svg{opacity:1; color:#C77BFF}
+.navi.on{background:#301E58; color:#fff; box-shadow:0 0 0 .15cqw rgba(199,123,255,.55)}
+.navi.on svg{opacity:1; color:#E0A6FF}
+.navsec{font-size:.85cqw; letter-spacing:.2em; color:var(--o-dim); font-weight:700; padding:1cqw .7cqw .3cqw}
+.navdiv{height:1px; background:var(--o-line); margin:.6cqw .35cqw}
+
+/* content pane */
+.pane{flex:1; min-width:0; padding:1.5cqw 1.7cqw; overflow-y:auto; overflow-x:hidden; scrollbar-width:none}
+.pane::-webkit-scrollbar{display:none}
+.paneHead{display:flex; align-items:flex-start; justify-content:space-between; gap:1cqw; margin-bottom:1.3cqw}
+.paneTitle{font-size:2.1cqw; font-weight:700; letter-spacing:-.01em}
+.paneSub{font-size:1.05cqw; color:var(--o-mute); margin-top:.2cqw}
+.userchip{display:flex; align-items:center; gap:.55cqw; flex:none; background:#1A1130;
+  border:1px solid var(--o-line-2); border-radius:99px; padding:.42cqw .85cqw; font-size:1cqw; color:#CFC4EA}
+.userchip i{width:.55cqw; height:.55cqw; border-radius:99px; background:var(--o-pink); display:block}
+
+/* featured */
+.feats{display:grid; grid-template-columns:1fr 1fr; gap:1cqw; margin-bottom:1.5cqw}
+.feat{display:flex; gap:1cqw; padding:1cqw; border-radius:.85cqw; text-align:left;
+  background:linear-gradient(115deg,#311C56,#1B1033 58%,#150C26); border:1px solid #3A2463}
+.feat.on{border-color:var(--o-focus); box-shadow:0 0 0 .17cqw rgba(199,123,255,.45)}
+.feat .art{width:5.4cqw; flex:none; aspect-ratio:2/3; border-radius:.45cqw; display:flex; align-items:flex-end;
+  padding:.45cqw; font-size:.85cqw; font-weight:800; line-height:1.15; text-shadow:0 1px 6px rgba(0,0,0,.95)}
+.feat .body{min-width:0; display:flex; flex-direction:column}
+.lab{font-size:.85cqw; letter-spacing:.17em; color:#C77BFF; font-weight:800}
+.feat h4{font-size:1.8cqw; font-weight:700; margin:.2cqw 0 .25cqw; letter-spacing:-.01em}
+.meta{font-size:1cqw; color:var(--o-mute)}
+.feat p{font-size:1cqw; color:#B4A9CE; line-height:1.35; margin:.45cqw 0 .65cqw;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.playbtn{display:inline-flex; align-items:center; gap:.45cqw; align-self:flex-start; margin-top:auto;
+  background:linear-gradient(90deg,var(--o-purple),var(--o-magenta)); color:#fff;
+  font-weight:700; font-size:1.05cqw; padding:.55cqw 1.1cqw; border-radius:.4cqw}
+.playbtn svg{width:1cqw; height:1cqw}
+
+/* rows */
+.rowhead{display:flex; align-items:center; justify-content:space-between; margin:0 0 .85cqw}
+.rowhead h5{display:flex; align-items:center; gap:.55cqw; font-size:1.1cqw; letter-spacing:.14em;
+  font-weight:700; text-transform:uppercase; margin:0}
+.rowhead h5 svg{width:1.25cqw; height:1.25cqw; color:#C77BFF}
+.seeall{font-size:.95cqw; color:var(--o-mute)}
+.strip{display:flex; gap:.95cqw; overflow-x:auto; scrollbar-width:none; padding-bottom:.3cqw; margin-bottom:1.4cqw}
+.strip::-webkit-scrollbar{display:none}
+.grid{display:grid; grid-template-columns:repeat(6,1fr); gap:1.2cqw 1cqw}
+.poster{width:10.4cqw; flex:none; text-align:left}
+.grid .poster{width:100%}
+.poster .art{position:relative; aspect-ratio:2/3; border-radius:.55cqw; border:1px solid #2A1C47;
+  display:flex; align-items:flex-end; padding:.55cqw; overflow:hidden;
+  font-size:1.05cqw; font-weight:800; line-height:1.14; letter-spacing:.01em; text-transform:uppercase;
+  overflow-wrap:anywhere; text-shadow:0 1px 8px rgba(0,0,0,.95)}
+.poster .cap{margin-top:.5cqw; font-size:1.02cqw; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.poster .cap i{color:var(--o-pink); font-size:.85cqw; font-style:normal; margin-right:.35cqw}
+.poster .yr{font-size:.9cqw; color:var(--o-mute); margin-top:.1cqw}
+.poster.on .art{border-color:var(--o-focus); box-shadow:0 0 0 .17cqw rgba(199,123,255,.5)}
+.poster.on .play{opacity:1; transform:scale(1)}
+.play{position:absolute; inset:0; margin:auto; width:3cqw; height:3cqw; border-radius:99px;
+  background:rgba(255,255,255,.94); display:grid; place-items:center;
+  opacity:0; transform:scale(.7); transition:opacity .18s ease, transform .18s ease}
+.play svg{width:1.3cqw; height:1.3cqw; color:#1A0F2E; margin-left:.12cqw}
+
+/* lists (channels, dining, concierge, folio) */
+.list{display:flex; flex-direction:column; gap:.7cqw}
+.li{display:flex; align-items:center; gap:1cqw; padding:.95cqw 1.15cqw; text-align:left;
+  background:var(--o-card); border:1px solid var(--o-line); border-radius:.55cqw}
+.li.on{border-color:var(--o-focus); background:#1F1438; box-shadow:0 0 0 .15cqw rgba(199,123,255,.42)}
+.li b{font-size:1.45cqw; font-weight:600}
+.li small{display:block; font-size:1.05cqw; color:var(--o-mute); margin-top:.12cqw; font-weight:400}
+.li .amt{margin-left:auto; font-size:1.35cqw; font-weight:700; color:#E0A6FF; white-space:nowrap}
+.li .num{width:2.6cqw; flex:none; font-size:1.1cqw; font-weight:700; color:var(--o-dim)}
+.folio-row{display:flex; gap:1cqw; padding:.7cqw 0; border-bottom:1px solid var(--o-line); font-size:1.25cqw}
+.folio-row small{display:block; color:var(--o-mute); font-size:1cqw}
+.folio-row .amt{margin-left:auto}
+.folio-total{display:flex; margin-top:1cqw; font-size:1.8cqw; font-weight:700; color:#E0A6FF}
 .folio-total .amt{margin-left:auto}
-.toast{
-  position:absolute; left:50%; bottom:3cqw; transform:translate(-50%,140%);
-  background:var(--tv-gold); color:#1A1305; font-weight:600; font-size:1.5cqw;
-  padding:1cqw 1.8cqw; border-radius:99px; opacity:0; pointer-events:none;
-  transition:transform .3s cubic-bezier(.2,.9,.3,1.2), opacity .2s ease;
-  max-width:80%; text-align:center;
-}
+.cartbar{display:flex; align-items:center; gap:1cqw; margin-top:1cqw; padding:.9cqw 1.15cqw;
+  border-radius:.55cqw; background:linear-gradient(90deg,#2A1550,#1B1033); border:1px solid #3A2463; font-size:1.1cqw}
+.cartbar .amt{margin-left:auto; font-weight:700; color:#E0A6FF; font-size:1.3cqw}
+.toast{position:absolute; left:50%; bottom:3cqw; transform:translate(-50%,140%);
+  background:linear-gradient(90deg,var(--o-purple),var(--o-magenta)); color:#fff; font-weight:700;
+  font-size:1.35cqw; padding:.9cqw 1.7cqw; border-radius:99px; opacity:0; pointer-events:none;
+  box-shadow:0 .5cqw 2cqw rgba(0,0,0,.5);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2), opacity .2s ease}
 .toast.up{transform:translate(-50%,0); opacity:1}
 
 /* ---------- remote ---------- */
@@ -268,7 +308,7 @@ tr.fresh td{background:var(--accent-soft)}
   <section id="view-tv" role="tabpanel" aria-labelledby="tab-tv">
     <div class="stage">
       <div class="bezel">
-        <div class="screen"><div class="screen-pad" id="tv"></div><div class="toast" id="toast"></div></div>
+        <div class="screen"><div class="tvroot" id="tv"></div><div class="toast" id="toast"></div></div>
       </div>
       <div class="remote">
         <h3>Remote</h3>
@@ -360,166 +400,272 @@ const SEED = () => ({
 });
 let S = SEED();
 
-/* ================= television ================= */
-const MENU = [
-  {n:"Club sandwich", d:"Triple-decker, hand-cut chips", p:780},
-  {n:"Sinigang na hipon", d:"Prawn, tamarind broth, rice", p:1120},
-  {n:"Margherita pizza", d:"Buffalo mozzarella, basil", p:890},
-  {n:"Cheeseburger", d:"Aged beef, aioli, chips", p:950},
-  {n:"Mango cheesecake", d:"Calamansi cream", p:420}
+/* ================= television: the Orpheus interface ================= */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const I = {
+  home:'<path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1z"/>',
+  tv:'<path d="M4 8h16v11H4z"/><path d="M8 3l4 5 4-5"/>',
+  radio:'<path d="M3 10h18v10H3z"/><path d="M17 3L7 7"/><circle cx="8" cy="15" r="2.5"/><path d="M15 13h4M15 17h4"/>',
+  film:'<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M8 4v16M16 4v16M3 12h18"/>',
+  monitor:'<rect x="2.5" y="4.5" width="19" height="12" rx="1.5"/><path d="M8 20h8"/>',
+  music:'<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+  dining:'<path d="M4 3v8a4 4 0 008 0V3M8 11v10"/><path d="M18 3c-1.5 2-2 4-2 7h4c0-3-.5-5-2-7zM18 10v11"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="1.8"/><path d="M8 3v4M16 3v4M3 11h18"/>',
+  chat:'<path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',
+  hotel:'<path d="M3 21h18M5 21V7l7-4 7 4v14M10 21v-5h4v5"/>',
+  bill:'<path d="M6 2v20l3-2 3 2 3-2 3 2V2l-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  play:'<path d="M8 5l11 7-11 7z" fill="currentColor" stroke="none"/>'
+};
+const svg = (k, cls) => '<svg class="'+(cls||"")+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+I[k]+'</svg>';
+
+const NAV = [
+  {k:"home",      n:"Home",         i:"home"},
+  {k:"livetv",    n:"Live TV",      i:"tv"},
+  {k:"radio",     n:"Live Radio",   i:"radio"},
+  {k:"movies",    n:"Movies",       i:"film"},
+  {k:"shows",     n:"TV Shows",     i:"monitor"},
+  {k:"music",     n:"Music",        i:"music"},
+  {k:"playlist",  n:"Playlist",     i:"list"},
+  {sec:"Your stay"},
+  {k:"dining",    n:"Dining",       i:"dining"},
+  {k:"resv",      n:"Reservations", i:"cal"},
+  {k:"concierge", n:"Concierge",    i:"chat"},
+  {k:"info",      n:"Hotel",        i:"hotel"},
+  {k:"bill",      n:"My Bill",      i:"bill"}
 ];
-const BOOKABLE = [
-  {n:"Spa — deep tissue, 60 min", d:"Today 18:00 · 2 therapists free", p:3200},
-  {n:"Spa — aromatherapy, 90 min", d:"Tomorrow 10:30", p:4100},
-  {n:"Azure Rooftop — dinner for 2", d:"Tonight 19:45 · window", p:0},
-  {n:"Harbour tour — sunset", d:"Tomorrow 16:00 · hotel pier", p:1800}
+
+const FEATURED = [
+  {t:"Office Romance", y:2026, k:"Movies", r:"R", g:"linear-gradient(160deg,#8E5A6B,#2A1620)",
+   d:"Jackie, President and CEO of Air Cruz, runs a tight ship in her business, including a rigid anti-fraternisation policy."},
+  {t:"Shelter", y:2026, k:"Movies", r:"R", g:"linear-gradient(160deg,#33505A,#0E1A20)",
+   d:"A reclusive former government assassin finds his forced isolation shattered when a stranded supply run goes wrong."}
 ];
-const ASKS = [
-  {n:"Wake-up call — 06:30", d:"Rings the room phone, then the desk if you don't answer", pri:"Standard", sla:60},
-  {n:"Do not disturb — tonight", d:"Holds calls, and tells housekeeping", pri:"Standard", sla:10},
-  {n:"Extra towels", d:"Housekeeping · target 15 min", pri:"Standard", sla:15},
-  {n:"Turn-down service", d:"Housekeeping · this evening", pri:"Standard", sla:30},
-  {n:"Airport transfer", d:"Concierge will call back", pri:"Standard", sla:20},
-  {n:"Something is broken", d:"Maintenance · target 20 min", pri:"Urgent", sla:20}
+const MOVIES = [
+  {t:"On the Hunt", y:2026, g:"linear-gradient(160deg,#8A3B22,#241009)"},
+  {t:"One Mile: Chapter One", y:2026, g:"linear-gradient(160deg,#3A4A5C,#10171F)"},
+  {t:"One Mile: Chapter Two", y:2026, g:"linear-gradient(160deg,#4A4438,#181510)"},
+  {t:"Mercy", y:2026, g:"linear-gradient(160deg,#6B2230,#1C0A10)"},
+  {t:"Mexicali", y:2026, g:"linear-gradient(160deg,#8A6A2A,#241B0B)"},
+  {t:"The Long Harbour", y:2026, g:"linear-gradient(160deg,#1B3A5C,#0B1524)"},
+  {t:"Salt & Ember", y:2025, g:"linear-gradient(160deg,#5C2B2B,#1B0D0D)"},
+  {t:"Northlight", y:2025, g:"linear-gradient(160deg,#1E4A45,#08201D)"},
+  {t:"Paper Cities", y:2025, g:"linear-gradient(160deg,#4A3A62,#170F26)"},
+  {t:"Monsoon Season", y:2024, g:"linear-gradient(160deg,#5A4520,#1D1508)"}
 ];
-const CATALOGUE = [
-  {t:"The Long Harbour", g:"linear-gradient(160deg,#1B3A5C,#0B1524)"},
-  {t:"Salt & Ember", g:"linear-gradient(160deg,#5C2B2B,#1B0D0D)"},
-  {t:"Northlight", g:"linear-gradient(160deg,#1E4A45,#08201D)"},
-  {t:"Paper Cities", g:"linear-gradient(160deg,#4A3A62,#170F26)"},
-  {t:"Monsoon Season", g:"linear-gradient(160deg,#5A4520,#1D1508)"}
+const SERIES = [
+  {t:"Voltron Defender of the Universe", y:1984, g:"linear-gradient(160deg,#2A3A7A,#0C1130)"},
+  {t:"Avatar The Last Airbender", y:2024, g:"linear-gradient(160deg,#B5651D,#2A1608)"},
+  {t:"The Legend of Korra", y:2012, g:"linear-gradient(160deg,#7A4BA8,#1E1030)"},
+  {t:"Ballard", y:2025, g:"linear-gradient(160deg,#8A5A3A,#241408)"},
+  {t:"Andor", y:2026, g:"linear-gradient(160deg,#44443A,#141410)"},
+  {t:"Northern Lines", y:2025, g:"linear-gradient(160deg,#25506B,#0A1620)"},
+  {t:"The Quiet Coast", y:2024, g:"linear-gradient(160deg,#4B6B52,#101A12)"},
+  {t:"Harbour Lights", y:2023, g:"linear-gradient(160deg,#6B4470,#1A0F1E)"}
 ];
 const CHANNELS = [
-  {n:"ONE Sports HD", d:"Now: Football — matchday 14"},
-  {n:"World News 24", d:"Now: Evening bulletin"},
-  {n:"Cinema One", d:"Now: Feature presentation"},
-  {n:"Discovery Asia", d:"Now: Wild Philippines"}
+  {n:"ONE Sports HD",  d:"Now: Football — matchday 14"},
+  {n:"World News 24",  d:"Now: Evening bulletin"},
+  {n:"Cinema One",     d:"Now: Feature presentation"},
+  {n:"Discovery Asia", d:"Now: Wild Philippines"},
+  {n:"Kids Central",   d:"Now: Morning cartoons"},
+  {n:"Travel & Living",d:"Now: Islands of the south"}
+];
+const RADIO = [
+  {n:"Orpheus Lounge",   d:"Downtempo · 24 hours"},
+  {n:"Manila Jazz",      d:"Standards and modern"},
+  {n:"Classical Harbour",d:"Chamber and orchestral"},
+  {n:"Island Drive",     d:"Tropical house"}
+];
+const MUSIC = [
+  {n:"Late Checkout",    d:"Orpheus Sessions · 12 tracks"},
+  {n:"Lobby, 8pm",       d:"Orpheus Sessions · 9 tracks"},
+  {n:"Monsoon",          d:"Orpheus Sessions · 14 tracks"},
+  {n:"Bay View",         d:"Orpheus Sessions · 10 tracks"}
+];
+const PLAYLIST = [
+  {n:"Continue watching — One Mile: Chapter One", d:"42 minutes remaining"},
+  {n:"Saved — Northlight", d:"Added yesterday"},
+  {n:"Saved — Ballard", d:"Added on arrival"}
+];
+const MENU = [
+  {n:"Club sandwich",    d:"Triple-decker, hand-cut chips", p:780},
+  {n:"Sinigang na hipon",d:"Prawn, tamarind broth, rice",   p:1120},
+  {n:"Margherita pizza", d:"Buffalo mozzarella, basil",     p:890},
+  {n:"Cheeseburger",     d:"Aged beef, aioli, chips",       p:950},
+  {n:"Mango cheesecake", d:"Calamansi cream",               p:420}
+];
+const BOOKABLE = [
+  {n:"Spa — deep tissue, 60 min",  d:"Today 18:00 · 2 therapists free", p:3200},
+  {n:"Spa — aromatherapy, 90 min", d:"Tomorrow 10:30",                 p:4100},
+  {n:"Azure Rooftop — dinner for 2", d:"Tonight 19:45 · window",       p:0},
+  {n:"Harbour tour — sunset",      d:"Tomorrow 16:00 · hotel pier",    p:1800}
+];
+const ASKS = [
+  {n:"Wake-up call — 06:30",     d:"Rings the room phone, then the desk if you don't answer", pri:"Standard", sla:60},
+  {n:"Do not disturb — tonight", d:"Holds calls, and tells housekeeping",                     pri:"Standard", sla:10},
+  {n:"Extra towels",             d:"Housekeeping · target 15 min",                            pri:"Standard", sla:15},
+  {n:"Turn-down service",        d:"Housekeeping · this evening",                             pri:"Standard", sla:30},
+  {n:"Something is broken",      d:"Maintenance · target 20 min",                             pri:"Urgent",   sla:20}
+];
+const HOTEL = [
+  {n:"Azure Rooftop", d:"Level 21 · dinner 18:00–23:00"},
+  {n:"The Anchor Bar", d:"Lobby level · until 01:00"},
+  {n:"Serenity Spa",  d:"Level 4 · 10:00–22:00"},
+  {n:"Pool & gym",    d:"Level 5 · gym open 24 hours"},
+  {n:"Front desk",    d:"Dial 0 · always open"}
 ];
 
 let screen = "home", fi = 0, cart = [];
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const ICON = {
-  watch:'<path d="M2 6h20v12H2z"/><path d="M10 10l5 2-5 2z" fill="currentColor"/>',
-  order:'<path d="M4 3v8a4 4 0 008 0V3M8 11v10"/><path d="M18 3c-1.5 2-2 4-2 7h4c0-3-.5-5-2-7zM18 10v11"/>',
-  book:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>',
-  ask:'<path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',
-  hotel:'<path d="M3 21h18M5 21V7l7-4 7 4v14M10 21v-5h4v5"/>',
-  bill:'<path d="M6 2v20l3-2 3 2 3-2 3 2V2l-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'
-};
-const svg = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+ICON[k]+'</svg>';
 
-const TILES = [
-  {k:"watch", b:"Watch", s:"Live TV, films and series"},
-  {k:"order", b:"Order", s:"In-room dining and bar"},
-  {k:"book",  b:"Book",  s:"Spa, tables and tours"},
-  {k:"ask",   b:"Ask",   s:"Concierge and housekeeping"},
-  {k:"hotel", b:"Hotel", s:"Services and wayfinding"},
-  {k:"bill",  b:"Bill",  s:"Folio and express checkout"}
-];
+const money = p => p ? '<span class="amt">'+PESO(p)+'</span>' : '<span class="amt">Included</span>';
 
-function head(back){
-  const g = S.guest;
-  return '<div class="tv-top"><div>'+
-    (back ? '<div class="tv-back">← Back to menu</div>' :
-      '<div class="tv-hello">Good evening, Ms '+esc(g.name.split(" ").pop())+'</div>')+
-    '<div class="tv-sub">Room '+g.room+' · '+g.nights+' nights remaining · '+g.tier+' member</div>'+
-  '</div><div class="tv-chip">2 messages</div></div>';
+function rail(){
+  return '<div class="brand"><div class="orb"><span></span></div><b>Orpheus</b></div>' +
+    NAV.map(v => v.sec
+      ? '<div class="navdiv"></div><div class="navsec">'+esc(v.sec).toUpperCase()+'</div>'
+      : '<button class="navi f'+(v.k === screen ? " cur" : "")+'" data-go="'+v.k+'">'+
+        svg(v.i)+'<span>'+esc(v.n)+'</span></button>'
+    ).join("");
 }
-function money(p){ return p ? '<span class="amt">'+PESO(p)+'</span>' : '<span class="amt">No charge</span>'; }
-function rows(items){
-  return '<div class="list">'+items.map((m,i)=>
-    '<button class="li f" data-i="'+i+'"><div><b>'+esc(m.n)+'</b><small>'+esc(m.d)+'</small></div>'+money(m.p)+'</button>'
-  ).join("")+'</div>';
+
+function head(title, sub){
+  const g = S.guest;
+  return '<div class="paneHead"><div><div class="paneTitle">'+title+'</div>'+
+    (sub ? '<div class="paneSub">'+sub+'</div>' : '') + '</div>' +
+    '<div class="userchip"><i></i>Room '+g.room+' · '+esc(g.name)+'</div></div>';
+}
+
+function posters(items, kind){
+  return items.map((m, i) =>
+    '<button class="poster f" data-play="'+kind+':'+i+'">' +
+      '<div class="art" style="background:'+m.g+'">'+esc(m.t)+
+        '<span class="play">'+svg("play")+'</span></div>' +
+      '<div class="cap"><i>&#9654;</i>'+esc(m.t)+'</div><div class="yr">'+m.y+'</div>' +
+    '</button>').join("");
+}
+
+function rowhead(icon, label){
+  return '<div class="rowhead"><h5>'+svg(icon)+label+'</h5><span class="seeall">See all &rarr;</span></div>';
+}
+
+function rows(items, withNum){
+  return '<div class="list">'+items.map((m, i) =>
+    '<button class="li f" data-i="'+i+'">'+(withNum ? '<span class="num">'+String(i+1).padStart(2,"0")+'</span>' : '')+
+    '<div><b>'+esc(m.n)+'</b><small>'+esc(m.d)+'</small></div>'+
+    (m.p === undefined ? '' : money(m.p))+'</button>').join("")+'</div>';
+}
+
+function pane(){
+  if(screen === "home"){
+    return head("Good evening, Ms "+S.guest.name.split(" ").pop(), S.guest.nights+" nights remaining · "+S.guest.tier+" member") +
+      '<div class="feats">' + FEATURED.map((f, i) =>
+        '<button class="feat f" data-play="feat:'+i+'">' +
+          '<div class="art" style="background:'+f.g+'">'+esc(f.t)+'</div>' +
+          '<div class="body"><div class="lab">FEATURED</div><h4>'+esc(f.t)+'</h4>' +
+          '<div class="meta">'+f.y+' &middot; '+f.k+' &middot; &#9733; '+f.r+'</div>' +
+          '<p>'+esc(f.d)+'</p>' +
+          '<span class="playbtn">'+svg("play")+'Watch now</span></div></button>').join("") + '</div>' +
+      rowhead("film", "Last added movies") + '<div class="strip">'+posters(MOVIES.slice(0,7), "movie")+'</div>' +
+      rowhead("monitor", "Last added series") + '<div class="strip">'+posters(SERIES.slice(0,7), "series")+'</div>';
+  }
+  if(screen === "movies")   return head("Movies", MOVIES.length+" titles") + '<div class="grid">'+posters(MOVIES,"movie")+'</div>';
+  if(screen === "shows")    return head("TV Shows", SERIES.length+" series") + '<div class="grid">'+posters(SERIES,"series")+'</div>';
+  if(screen === "livetv")   return head("Live TV", "Channel guide") + rows(CHANNELS, true);
+  if(screen === "radio")    return head("Live Radio", "Stations") + rows(RADIO, true);
+  if(screen === "music")    return head("Music", "Orpheus Sessions") + rows(MUSIC, true);
+  if(screen === "playlist") return head("Playlist", "Your list, cleared at checkout") + rows(PLAYLIST);
+  if(screen === "dining"){
+    const total = cart.reduce((a,b)=>a+b.p,0);
+    return head("Dining", "In-room dining to Room "+S.guest.room) + rows(MENU) +
+      (cart.length ? '<div class="cartbar"><span>'+cart.length+' item'+(cart.length>1?"s":"")+' ready to send</span>' +
+        '<span class="amt">'+PESO(total)+'</span></div>' +
+        '<div class="list" style="margin-top:.8cqw"><button class="li f" data-send="1">' +
+        '<div><b>Send order to the kitchen</b><small>Charged to your folio — no signature needed</small></div></button></div>' : "");
+  }
+  if(screen === "resv")      return head("Reservations", "Spa, tables and tours") + rows(BOOKABLE);
+  if(screen === "concierge") return head("Concierge", "How can we help?") + rows(ASKS.map(a=>({n:a.n,d:a.d})));
+  if(screen === "info")      return head("Harbour Grand Manila", "Services and wayfinding") + rows(HOTEL);
+  if(screen === "bill"){
+    const tot = S.folio.reduce((a,b)=>a+b.amt,0);
+    return head("My Bill", "Folio · Room "+S.guest.room) + '<div>' +
+      S.folio.map(f=>'<div class="folio-row"><div>'+esc(f.desc)+'<small>'+esc(f.note)+'</small></div>' +
+        '<span class="amt">'+PESO(f.amt)+'</span></div>').join("") + '</div>' +
+      '<div class="folio-total"><span>Total due</span><span class="amt">'+PESO(tot)+'</span></div>' +
+      '<div class="list" style="margin-top:1cqw"><button class="li f"><div><b>Check out and settle</b>' +
+      '<small>Charged to the card on file, ending 4417</small></div></button></div>';
+  }
+  return "";
 }
 
 function renderTV(){
   const el = document.getElementById("tv");
-  let h = "";
-  if(screen === "home"){
-    h = head(false)+'<div class="tv-body"><div class="tiles">'+
-      TILES.map(t=>'<button class="tile f" data-go="'+t.k+'">'+svg(t.k)+'<b>'+t.b+'</b><span>'+t.s+'</span></button>').join("")+
-      '</div></div>';
-  } else if(screen === "watch"){
-    h = head(true)+'<div class="tv-body"><p class="rowlab">Orpheus Nations · featured</p><div class="rail">'+
-      CATALOGUE.map(c=>'<div class="art f" style="background:'+c.g+'">'+esc(c.t)+'</div>').join("")+
-      '</div><p class="rowlab">Live channels</p>'+rows(CHANNELS.map(c=>({n:c.n,d:c.d,p:0})))+'</div>';
-  } else if(screen === "order"){
-    const total = cart.reduce((a,b)=>a+b.p,0);
-    h = head(true)+'<div class="tv-body"><p class="rowlab">In-room dining · to Room '+S.guest.room+'</p>'+rows(MENU)+
-      (cart.length ? '<div class="folio-total"><span>'+cart.length+' item'+(cart.length>1?"s":"")+' — press OK on “Send order”</span><span class="amt">'+PESO(total)+'</span></div>'+
-        '<div class="list" style="margin-top:1cqw"><button class="li f" data-send="1"><div><b>Send order to the kitchen</b><small>Charged to your folio — no signature needed</small></div></button></div>' : "")+
-      '</div>';
-  } else if(screen === "book"){
-    h = head(true)+'<div class="tv-body"><p class="rowlab">Reserve</p>'+rows(BOOKABLE)+'</div>';
-  } else if(screen === "ask"){
-    h = head(true)+'<div class="tv-body"><p class="rowlab">How can we help?</p>'+rows(ASKS.map(a=>({n:a.n,d:a.d,p:0})))+'</div>';
-  } else if(screen === "hotel"){
-    h = head(true)+'<div class="tv-body"><p class="rowlab">Harbour Grand Manila</p>'+rows([
-      {n:"Azure Rooftop",d:"Level 21 · dinner 18:00–23:00",p:0},
-      {n:"The Anchor Bar",d:"Lobby level · until 01:00",p:0},
-      {n:"Serenity Spa",d:"Level 4 · 10:00–22:00",p:0},
-      {n:"Pool & gym",d:"Level 5 · gym open 24 hours",p:0},
-      {n:"Front desk",d:"Dial 0 · always open",p:0}
-    ])+'</div>';
-  } else if(screen === "bill"){
-    const tot = S.folio.reduce((a,b)=>a+b.amt,0);
-    h = head(true)+'<div class="tv-body"><p class="rowlab">Folio · Room '+S.guest.room+'</p><div>'+
-      S.folio.map(f=>'<div class="folio-row"><div>'+esc(f.desc)+'<small style="display:block">'+esc(f.note)+'</small></div><span class="amt">'+PESO(f.amt)+'</span></div>').join("")+
-      '</div><div class="folio-total"><span>Total due</span><span class="amt">'+PESO(tot)+'</span></div>'+
-      '<div class="list" style="margin-top:1.4cqw"><button class="li f"><div><b>Check out and settle</b><small>Charged to the card on file, ending 4417</small></div></button></div></div>';
-  }
-  el.innerHTML = h;
+  el.innerHTML = '<div class="tvrail">'+rail()+'</div><div class="pane" id="pane">'+pane()+'</div>';
   const fs = el.querySelectorAll(".f");
-  if(fi >= fs.length) fi = Math.max(0, fs.length-1);
-  fs.forEach((n,i)=> n.classList.toggle("on", i===fi));
+  if(fi >= fs.length) fi = Math.max(0, fs.length - 1);
+  fs.forEach((n, i) => {
+    n.classList.toggle("on", i === fi);
+    n.addEventListener("click", () => { fi = i; renderTV(); activate(); });
+  });
   if(fs[fi]) fs[fi].scrollIntoView({block:"nearest", inline:"nearest"});
-  fs.forEach((n,i)=> n.addEventListener("click", ()=>{ fi=i; renderTV(); activate(); }));
 }
 
 let toastTimer;
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg; t.classList.add("up");
-  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("up"), 3400);
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("up"), 3200);
 }
-const pad = n => String(n).padStart(4,"0");
+const pad = n => String(n).padStart(4, "0");
+const ticket = (type, pri, sla) => {
+  S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type, pri, sla,
+                     t:now(), who:"Unassigned", done:false, fresh:true});
+  S.seen.queue = false; badges();
+};
 
 function activate(){
-  const el = document.getElementById("tv");
-  const node = el.querySelectorAll(".f")[fi];
+  const node = document.querySelectorAll("#tv .f")[fi];
   if(!node) return;
 
-  if(node.dataset.go){ screen = node.dataset.go; fi = 0; cart = []; return renderTV(); }
-
-  if(screen === "order"){
+  if(node.dataset.go){                       // rail
+    if(node.dataset.go !== screen){ screen = node.dataset.go; cart = []; }
+    fi = 0; return renderTV();
+  }
+  if(node.dataset.play){                     // catalogue
+    const [kind, idx] = node.dataset.play.split(":");
+    const src = kind === "feat" ? FEATURED : kind === "series" ? SERIES : MOVIES;
+    return toast("Playing " + src[+idx].t);
+  }
+  if(screen === "dining"){
     if(node.dataset.send){
-      const total = cart.reduce((a,b)=>a+b.p,0);
-      const names = cart.map(c=>c.n).join(" · ");
-      S.kitchen.unshift({id:"KO-"+pad(4472+S.kitchen.length), room:S.guest.room, items:names, station:"Hot", t:now(), state:"New", fresh:true});
-      S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:"In-room dining delivery", pri:"Standard", sla:35, t:now(), who:"Unassigned", done:false, fresh:true});
+      const total = cart.reduce((a,b)=>a+b.p,0), names = cart.map(c=>c.n).join(" · ");
+      S.kitchen.unshift({id:"KO-"+pad(4472+S.kitchen.length), room:S.guest.room, items:names,
+                         station:"Hot", t:now(), state:"New", fresh:true});
+      ticket("In-room dining delivery", "Standard", 35);
       S.folio.push({desc:"In-room dining", note:names, amt:total, t:now(), fresh:true});
-      S.seen.kitchen = false; S.seen.queue = false; badges();
-      cart = []; toast("Order sent — it is on your folio"); fi = 0; return renderTV();
+      S.seen.kitchen = false; badges();
+      cart = []; fi = 0; toast("Order sent — it is on your folio"); return renderTV();
     }
     const item = MENU[+node.dataset.i];
     cart.push(item); toast(item.n + " added"); return renderTV();
   }
-
-  if(screen === "book"){
+  if(screen === "resv"){
     const b = BOOKABLE[+node.dataset.i];
-    S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:"Reservation — "+b.n, pri:"Standard", sla:20, t:now(), who:"Unassigned", done:false, fresh:true});
+    ticket("Reservation — " + b.n, "Standard", 20);
     if(b.p) S.folio.push({desc:b.n, note:"Reserved from the television", amt:b.p, t:now(), fresh:true});
-    S.seen.queue = false; badges(); toast("Reserved — confirmation on its way"); return renderTV();
+    return toast("Reserved — confirmation on its way");
   }
-
-  if(screen === "ask"){
+  if(screen === "concierge"){
     const a = ASKS[+node.dataset.i];
-    S.tickets.unshift({id:"SR-"+pad(2292+S.tickets.length), room:S.guest.room, type:a.n, pri:a.pri, sla:a.sla, t:now(), who:"Unassigned", done:false, fresh:true});
-    S.seen.queue = false; badges(); toast("Asked — someone is on it"); return renderTV();
+    ticket(a.n, a.pri, a.sla);
+    return toast("Asked — someone is on it");
   }
-
-  if(screen === "bill"){ toast("Checked out. Safe travels, Ms Reyes."); return; }
-  if(screen === "watch"){ toast("Playing — press Back to return"); return; }
+  if(screen === "livetv")   return toast("Tuning to " + CHANNELS[+node.dataset.i].n);
+  if(screen === "radio")    return toast("Playing " + RADIO[+node.dataset.i].n);
+  if(screen === "music")    return toast("Playing " + MUSIC[+node.dataset.i].n);
+  if(screen === "playlist") return toast("Resuming where you left off");
+  if(screen === "bill")     return toast("Checked out. Safe travels, Ms Reyes.");
 }
 
 /* geometric d-pad focus */
@@ -527,23 +673,26 @@ function move(dir){
   const fs = [...document.querySelectorAll("#tv .f")];
   if(!fs.length) return;
   const cur = fs[fi].getBoundingClientRect();
-  const cx = cur.left+cur.width/2, cy = cur.top+cur.height/2;
+  const cx = cur.left + cur.width/2, cy = cur.top + cur.height/2;
   let best = -1, bestScore = Infinity;
-  fs.forEach((n,i)=>{
-    if(i===fi) return;
-    const r = n.getBoundingClientRect(), x = r.left+r.width/2, y = r.top+r.height/2;
-    const dx = x-cx, dy = y-cy;
-    const fwd = dir==="ArrowRight"?dx : dir==="ArrowLeft"?-dx : dir==="ArrowDown"?dy : -dy;
+  fs.forEach((n, i) => {
+    if(i === fi) return;
+    const r = n.getBoundingClientRect(), x = r.left + r.width/2, y = r.top + r.height/2;
+    const dx = x - cx, dy = y - cy;
+    const fwd = dir === "ArrowRight" ? dx : dir === "ArrowLeft" ? -dx : dir === "ArrowDown" ? dy : -dy;
     if(fwd <= 2) return;
-    const off = (dir==="ArrowLeft"||dir==="ArrowRight") ? Math.abs(dy) : Math.abs(dx);
-    const score = fwd + off*2.2;
+    const off = (dir === "ArrowLeft" || dir === "ArrowRight") ? Math.abs(dy) : Math.abs(dx);
+    const score = fwd + off * 2.2;
     if(score < bestScore){ bestScore = score; best = i; }
   });
   if(best >= 0){ fi = best; renderTV(); }
 }
 function key(k){
-  if(k==="Enter") return activate();
-  if(k==="Backspace"){ if(screen!=="home"){ screen="home"; fi=0; cart=[]; renderTV(); } return; }
+  if(k === "Enter") return activate();
+  if(k === "Backspace"){
+    if(screen !== "home"){ screen = "home"; fi = 0; cart = []; renderTV(); }
+    return;
+  }
   if(k.startsWith("Arrow")) move(k);
 }
 document.addEventListener("keydown", e=>{
@@ -553,7 +702,7 @@ document.addEventListener("keydown", e=>{
     e.preventDefault(); key(e.key);
   }
 });
-document.querySelectorAll("[data-k]").forEach(b=> b.addEventListener("click", ()=>key(b.dataset.k)));
+document.querySelectorAll("[data-k]").forEach(b => b.addEventListener("click", ()=>key(b.dataset.k)));
 
 /* ================= pre-arrival on the guest's phone ================= */
 const MRZ1 = "P<FRAMOREAU<<LUCIE<<<<<<<<<<<<<<<<<<<<<<<<<<";

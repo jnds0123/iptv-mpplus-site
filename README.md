@@ -62,9 +62,11 @@ Open `demo/index.html` in any browser — no build step, no dependencies.
 The point of the prototype is the cross-link, not the styling. It carries three surfaces
 that share one state:
 
-- **Guest television** — driven by arrow keys, Enter and Backspace, the four inputs a
-  hotel remote actually has, or by the on-screen remote. Order dinner, set a wake-up
-  call, review the folio.
+- **Guest television** — built in the Orpheus Nations interface: the left rail, the
+  featured hero cards, the poster carousels and the purple focus glow, carrying twelve
+  sections from Live TV and Movies through to Dining, Concierge and My Bill. Driven by
+  arrow keys, Enter and Backspace, the four inputs a hotel remote actually has, or by
+  the on-screen remote.
 - **Pre-arrival** — the guest's own phone, as a web page rather than an app. Scan a
   passport, check the parsed fields, sign the registration card with a finger.
 - **Hotel console** — arrivals, service queue with live SLA clocks, kitchen display,
