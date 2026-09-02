@@ -59,13 +59,22 @@ soffice --headless --convert-to pdf --outdir presentation \
 
 Open `demo/index.html` in any browser — no build step, no dependencies.
 
-The point of the prototype is the cross-link, not the styling. Place an in-room dining
-order on the television, then switch to the hotel console: the kitchen order, the
-service ticket and the folio line are already there, because both screens read the same
-state. That is the deck's central claim, made demonstrable in about fifteen seconds.
+The point of the prototype is the cross-link, not the styling. It carries three surfaces
+that share one state:
 
-The television is driven by arrow keys, Enter and Backspace — the four inputs a hotel
-remote actually has — or by the on-screen remote.
+- **Guest television** — driven by arrow keys, Enter and Backspace, the four inputs a
+  hotel remote actually has, or by the on-screen remote. Order dinner, set a wake-up
+  call, review the folio.
+- **Pre-arrival** — the guest's own phone, as a web page rather than an app. Scan a
+  passport, check the parsed fields, sign the registration card with a finger.
+- **Hotel console** — arrivals, service queue with live SLA clocks, kitchen display,
+  document vault with retention clocks, and the folio.
+
+Act on any guest surface and the console already reflects it. Order dinner on the
+television and the kitchen order, the service ticket and the folio line appear. Complete
+pre-arrival and Room 1502 flips from *Not started* to *Scanned & signed*, with both
+documents in the vault on a retention clock. That is the deck's central claim, made
+demonstrable in about fifteen seconds.
 
 ## Before this goes to a client
 

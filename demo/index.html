@@ -163,6 +163,7 @@ button{font:inherit; color:inherit; background:none; border:none; cursor:pointer
 .tabs button{padding:6px 11px; border-radius:6px; font-size:12.5px; font-weight:500; color:var(--ink-2); position:relative}
 .tabs button[aria-selected="true"]{background:var(--panel); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line)}
 .dot{display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--crit); margin-left:5px; vertical-align:2px}
+.dot[hidden]{display:none}
 .cbody{padding:16px}
 
 .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px}
@@ -198,6 +199,50 @@ tr.fresh td{background:var(--accent-soft)}
 .foot b{color:var(--ink-2)}
 .reset{padding:6px 11px; border:1px solid var(--line); border-radius:7px; font-size:12px; font-weight:600; color:var(--ink-2); background:var(--panel)}
 .reset:hover{border-color:var(--accent); color:var(--accent)}
+/* ---------- guest phone: pre-arrival capture (a web page, not our app) ---------- */
+.phonewrap{display:flex; justify-content:center}
+.phone{width:100%; max-width:392px; border:1px solid var(--line); border-radius:20px;
+  background:var(--panel); box-shadow:var(--shadow); overflow:hidden}
+.ph-top{padding:16px 20px 0}
+.ph-brand{font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.ph-title{font-family:"Newsreader",Georgia,serif; font-size:21px; font-weight:600; margin-top:3px; letter-spacing:-.01em}
+.ph-sub{color:var(--ink-3); font-size:12px; margin-top:3px}
+.steps{display:flex; gap:5px; padding:14px 20px 0}
+.steps i{flex:1; height:3px; border-radius:99px; background:var(--line); transition:background .25s ease}
+.steps i.on{background:var(--accent)}
+.ph-body{padding:16px 20px 20px}
+.viewfinder{position:relative; aspect-ratio:1.42/1; border-radius:10px; overflow:hidden;
+  background:#0B1220; border:1px solid var(--line-2); display:grid; place-items:center}
+.vf-frame{position:absolute; inset:13px; border:2px dashed rgba(216,178,90,.5); border-radius:6px}
+.vf-hint{color:#8A9AB4; font-size:12px; text-align:center; padding:0 30px; line-height:1.45}
+.passport{position:absolute; inset:0; padding:13px; display:flex; flex-direction:column; justify-content:flex-end;
+  background:linear-gradient(150deg,#1B2B45,#0A1120)}
+.pp-head{position:absolute; top:13px; left:13px; right:13px; color:#9FB4D0; font-size:9.5px;
+  letter-spacing:.16em; text-transform:uppercase}
+.mrz{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:9px; line-height:1.75;
+  color:#D6E4F7; white-space:pre; overflow:hidden; letter-spacing:.4px}
+.fields{display:grid; grid-template-columns:auto 1fr; gap:9px 16px; margin:16px 0 4px; font-size:13.5px}
+.fields dt{color:var(--ink-3); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; align-self:center; white-space:nowrap}
+.fields dd{margin:0; font-weight:600}
+.sigbox{position:relative; border:1px dashed var(--line-2); border-radius:9px; background:var(--panel-2); touch-action:none; margin-top:10px}
+.sigbox canvas{display:block; width:100%; height:132px; border-radius:9px; cursor:crosshair}
+.sighint{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-3); font-size:12px; pointer-events:none}
+.btn{display:block; width:100%; padding:12px; border-radius:9px; background:var(--accent);
+  color:var(--bg); font-weight:700; font-size:14px; margin-top:12px}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--ink-3); border:1px solid var(--line); font-weight:600; font-size:12.5px; padding:9px}
+.done{text-align:center; padding:14px 0 4px}
+.done .tick{width:52px; height:52px; border-radius:99px; background:var(--ok-soft); color:var(--ok);
+  display:grid; place-items:center; margin:0 auto 14px}
+.done h3{font-family:"Newsreader",Georgia,serif; font-size:21px; font-weight:600}
+.done p{color:var(--ink-2); font-size:13px; margin:8px 0 0; line-height:1.5}
+.done .room{margin-top:16px; padding:12px; border-radius:9px; background:var(--accent-soft); border:1px solid var(--line);
+  font-size:13px; font-weight:600}
+.note{font-size:11.5px; color:var(--ink-3); line-height:1.5; margin:10px 0 0}
+.sidenote{max-width:330px; font-size:12.5px; color:var(--ink-2); line-height:1.6}
+.sidenote h3{font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3); margin-bottom:10px}
+.sidenote p{margin:0 0 12px}
+.sidenote b{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
 </style>
 
@@ -209,13 +254,14 @@ tr.fresh td{background:var(--accent-soft)}
     </div>
     <div class="seg" role="tablist" aria-label="Surface">
       <button role="tab" id="tab-tv" aria-selected="true" aria-controls="view-tv">Guest television</button>
+      <button role="tab" id="tab-doc" aria-selected="false" aria-controls="view-doc">Pre-arrival</button>
       <button role="tab" id="tab-ops" aria-selected="false" aria-controls="view-ops">Hotel console</button>
     </div>
   </div>
 
   <div class="hint">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
-    <div><b>Try this:</b> on the television, open <b>Order</b> and send something to Room 812 — or open <b>Ask</b> and set a wake-up call. Then switch to the <b>Hotel console</b>: the kitchen order, the service ticket and the folio line are already there, because one record sits behind the screen, the room phone and the desk alike.</div>
+    <div><b>Try this:</b> order dinner on the television, or complete <b>Pre-arrival</b> on the guest’s phone. Then open the <b>Hotel console</b>: the kitchen order, the service ticket, the folio line and the signed documents are already there, because one record sits behind every screen.</div>
   </div>
 
   <!-- ============ TELEVISION ============ -->
@@ -237,6 +283,19 @@ tr.fresh td{background:var(--accent-soft)}
     </div>
   </section>
 
+  <!-- ============ PRE-ARRIVAL (guest's own phone) ============ -->
+  <section id="view-doc" role="tabpanel" aria-labelledby="tab-doc" hidden>
+    <div class="stage">
+      <div class="phonewrap"><div class="phone" id="phone"></div></div>
+      <div class="sidenote">
+        <h3>What this is</h3>
+        <p>The guest's own phone, opened from a link in the confirmation. <b>A web page, not an app</b> — nobody installs software for a two-night stay, and it has to work on iOS.</p>
+        <p>The scan is parsed on the device. What reaches the platform is <b>structured fields</b>, not a photograph to be read again later.</p>
+        <p>Finish it and the front desk sees Room 1502 flip from <b>Not started</b> to <b>Scanned &amp; signed</b>, with both documents in the vault on a retention clock.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ CONSOLE ============ -->
   <section id="view-ops" role="tabpanel" aria-labelledby="tab-ops" hidden>
     <div class="console">
@@ -245,6 +304,7 @@ tr.fresh td{background:var(--accent-soft)}
         <div class="tabs" role="tablist" aria-label="Console section">
           <button role="tab" data-ops="today" aria-selected="true">Today</button>
           <button role="tab" data-ops="arrivals" aria-selected="false">Arrivals</button>
+          <button role="tab" data-ops="docs" aria-selected="false">Documents<span class="dot" id="d-docs" hidden></span></button>
           <button role="tab" data-ops="queue" aria-selected="false">Service queue<span class="dot" id="d-queue" hidden></span></button>
           <button role="tab" data-ops="kitchen" aria-selected="false">Kitchen<span class="dot" id="d-kitchen" hidden></span></button>
           <button role="tab" data-ops="folio" aria-selected="false">Folio 812</button>
@@ -283,6 +343,12 @@ const SEED = () => ({
     {id:"KO-4471", room:"1104", items:"Caesar salad · Iced tea", station:"Cold", t:now()-540000, state:"Firing"},
     {id:"KO-4468", room:"706",  items:"Adobo flakes · Garlic rice ×2", station:"Hot", t:now()-1080000, state:"Plating"}
   ],
+  documents:[
+    {id:"DOC-8841", guest:"D. Okonkwo", room:"1210", type:"Passport", t:now()-86400000, keep:400, reads:2},
+    {id:"DOC-8840", guest:"D. Okonkwo", room:"1210", type:"Registration card", t:now()-86400000, keep:1825, reads:0},
+    {id:"DOC-8839", guest:"S. Fontaine", room:"604", type:"Registration card", t:now()-72000000, keep:1825, reads:1},
+    {id:"DOC-8836", guest:"Maria Reyes", room:"812", type:"Passport", t:now()-172800000, keep:400, reads:1}
+  ],
   arrivals:[
     {name:"Maria Reyes", room:"812", eta:"Arrived", doc:"complete", pay:"authorised", tier:"Gold"},
     {name:"D. Okonkwo", room:"1210", eta:"15:40", doc:"complete", pay:"authorised", tier:"Platinum"},
@@ -290,7 +356,7 @@ const SEED = () => ({
     {name:"H. Tanaka", room:"908", eta:"18:00", doc:"scanned", pay:"pending", tier:"Gold"},
     {name:"L. Moreau", room:"1502", eta:"21:30", doc:"none", pay:"pending", tier:"—"}
   ],
-  seen:{queue:true, kitchen:true}
+  seen:{queue:true, kitchen:true, docs:true}
 });
 let S = SEED();
 
@@ -489,6 +555,116 @@ document.addEventListener("keydown", e=>{
 });
 document.querySelectorAll("[data-k]").forEach(b=> b.addEventListener("click", ()=>key(b.dataset.k)));
 
+/* ================= pre-arrival on the guest's phone ================= */
+const MRZ1 = "P<FRAMOREAU<<LUCIE<<<<<<<<<<<<<<<<<<<<<<<<<<";
+const MRZ2 = "19HB543219FRA9203145F3108126<<<<<<<<<<<<<<02";
+const PARSED = [
+  ["Surname", "MOREAU"], ["Given names", "LUCIE"], ["Document", "Passport \u00b7 France"],
+  ["Number", "19HB54321"], ["Date of birth", "14 March 1992"], ["Sex", "F"], ["Expires", "12 August 2031"]
+];
+let dstep = 0, sigInk = false;
+
+function phoneHead(title, sub){
+  return '<div class="ph-top"><div class="ph-brand">Harbour Grand Manila</div>' +
+    '<div class="ph-title">' + title + '</div><div class="ph-sub">' + sub + '</div></div>' +
+    '<div class="steps">' + [0,1,2,3].map(i => '<i class="' + (i <= dstep ? "on" : "") + '"></i>').join("") + '</div>';
+}
+
+function renderDoc(){
+  const el = document.getElementById("phone");
+  let h = "";
+
+  if(dstep === 0){
+    h = phoneHead("Check in before you arrive", "Takes about a minute. Step 1 of 4.") +
+      '<div class="ph-body"><div class="viewfinder"><div class="vf-frame"></div>' +
+      '<div class="vf-hint">Hold your passport flat inside the frame</div></div>' +
+      '<button class="btn" id="cap">Scan passport</button>' +
+      '<p class="note">The scan is read on your phone. We keep the details, not the picture.</p></div>';
+  }
+
+  if(dstep === 1){
+    h = phoneHead("Is this right?", "Read from the passport. Step 2 of 4.") +
+      '<div class="ph-body"><div class="viewfinder"><div class="passport">' +
+      '<div class="pp-head">R\u00e9publique Fran\u00e7aise \u00b7 Passeport</div>' +
+      '<div class="mrz">' + esc(MRZ1) + "\n" + esc(MRZ2) + '</div></div></div>' +
+      '<dl class="fields">' + PARSED.map(f => "<dt>" + f[0] + "</dt><dd>" + f[1] + "</dd>").join("") + '</dl>' +
+      '<button class="btn" id="ok">These are correct</button>' +
+      '<button class="btn ghost" id="again">Scan again</button></div>';
+  }
+
+  if(dstep === 2){
+    h = phoneHead("Sign the registration card", "Step 3 of 4.") +
+      '<div class="ph-body"><dl class="fields">' +
+      "<dt>Guest</dt><dd>Lucie Moreau</dd>" +
+      "<dt>Room</dt><dd>1502 \u00b7 Deluxe King</dd>" +
+      "<dt>Nights</dt><dd>3 \u00b7 arriving today</dd>" +
+      "<dt>Card</dt><dd>Authorise \u20b12,000 incidentals</dd></dl>" +
+      '<div class="sigbox"><canvas id="sig"></canvas>' +
+      '<div class="sighint" id="sighint">Sign here with your finger</div></div>' +
+      '<button class="btn" id="submit" disabled>Sign and check in</button>' +
+      '<button class="btn ghost" id="clear">Clear signature</button></div>';
+  }
+
+  if(dstep === 3){
+    h = phoneHead("You are checked in", "Step 4 of 4.") +
+      '<div class="ph-body"><div class="done">' +
+      '<div class="tick"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+      "<h3>Thank you, Ms Moreau</h3>" +
+      "<p>Your registration card is signed and your card is authorised. Collect your key at the desk \u2014 there is nothing left to fill in.</p>" +
+      '<div class="room">Room 1502 \u00b7 ready from 14:00</div></div>' +
+      '<p class="note">Your passport details are held under the hotel\u2019s retention policy and deleted automatically when it expires.</p></div>';
+  }
+
+  el.innerHTML = h;
+
+  const cap = document.getElementById("cap");
+  if(cap) cap.addEventListener("click", () => { dstep = 1; renderDoc(); });
+  const ok = document.getElementById("ok");
+  if(ok) ok.addEventListener("click", () => { dstep = 2; sigInk = false; renderDoc(); });
+  const again = document.getElementById("again");
+  if(again) again.addEventListener("click", () => { dstep = 0; renderDoc(); });
+  const clear = document.getElementById("clear");
+  if(clear) clear.addEventListener("click", () => { sigInk = false; renderDoc(); });
+  const submit = document.getElementById("submit");
+  if(submit) submit.addEventListener("click", finishPreArrival);
+  if(dstep === 2) wireSignature();
+}
+
+function wireSignature(){
+  const c = document.getElementById("sig");
+  if(!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const r = c.getBoundingClientRect();
+  c.width = Math.max(1, Math.round(r.width * dpr));
+  c.height = Math.max(1, Math.round(r.height * dpr));
+  const g = c.getContext("2d");
+  g.scale(dpr, dpr);
+  g.lineWidth = 2.2; g.lineCap = "round"; g.lineJoin = "round";
+  g.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#101725";
+  let drawing = false;
+  const pt = e => { const b = c.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+  c.addEventListener("pointerdown", e => {
+    drawing = true; c.setPointerCapture(e.pointerId);
+    const [x, y] = pt(e); g.beginPath(); g.moveTo(x, y);
+    if(!sigInk){ sigInk = true; document.getElementById("sighint").style.display = "none";
+      document.getElementById("submit").disabled = false; }
+  });
+  c.addEventListener("pointermove", e => { if(!drawing) return; const [x, y] = pt(e); g.lineTo(x, y); g.stroke(); });
+  const up = () => { drawing = false; };
+  c.addEventListener("pointerup", up); c.addEventListener("pointercancel", up);
+}
+
+function finishPreArrival(){
+  const a = S.arrivals.find(x => x.name === "L. Moreau");
+  if(a && a.doc !== "complete"){
+    a.doc = "complete"; a.pay = "authorised"; a.eta = "Pre-checked in"; a.fresh = true;
+    S.documents.unshift({id:"DOC-8843", guest:"L. Moreau", room:"1502", type:"Registration card", t:now(), keep:1825, reads:0, fresh:true});
+    S.documents.unshift({id:"DOC-8842", guest:"L. Moreau", room:"1502", type:"Passport", t:now(), keep:400, reads:0, fresh:true});
+    S.seen.docs = false; badges();
+  }
+  dstep = 3; renderDoc();
+}
+
 /* ================= console ================= */
 let opsTab = "today";
 const mins = t => Math.floor((now()-t)/60000);
@@ -549,12 +725,29 @@ function renderOps(){
     h += table(["Guest","Room","Expected","Documents","Payment","Tier"],
       S.arrivals.map(a=>{
         const d = DOC[a.doc];
-        return '<tr><td><b>'+esc(a.name)+'</b></td><td class="mono">'+a.room+'</td><td>'+esc(a.eta)+'</td>'+
+        return '<tr'+(a.fresh?' class="fresh"':'')+'><td><b>'+esc(a.name)+'</b></td><td class="mono">'+a.room+'</td><td>'+esc(a.eta)+'</td>'+
         '<td><span class="pill '+d[0]+'">'+d[1]+'</span></td>'+
         '<td><span class="pill '+(a.pay==="authorised"?"ok":"warn")+'">'+(a.pay==="authorised"?"Authorised":"Pending")+'</span></td>'+
         '<td>'+esc(a.tier)+'</td></tr>';
       }).join(""));
-    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Three of five guests completed identity capture before arrival and can go straight to their room. The two marked amber still need the desk.</p>';
+    const ready = S.arrivals.filter(a=>DOC[a.doc][0]==="ok").length;
+    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">'+ready+' of '+S.arrivals.length+' guests completed identity capture before arrival and can go straight to their room. The rest still need the desk.</p>';
+  }
+
+  if(opsTab === "docs"){
+    S.seen.docs = true; badges();
+    h += '<h2 class="sec">Document vault</h2>';
+    h += table(["Ref","Guest","Room","Document","Captured","Retention","Reads"],
+      S.documents.map(d=>{
+        const days = Math.round(d.keep - (now()-d.t)/86400000);
+        const cls = days < 30 ? "warn" : "mut";
+        return '<tr'+(d.fresh?' class="fresh"':'')+'><td class="mono">'+d.id+'</td><td><b>'+esc(d.guest)+'</b></td>'+
+          '<td class="mono">'+d.room+'</td><td>'+esc(d.type)+'</td>'+
+          '<td style="color:var(--ink-3)">'+ago(d.t)+'</td>'+
+          '<td><span class="pill '+cls+'">purges in '+days+' days</span></td>'+
+          '<td class="mono">'+d.reads+'</td></tr>';
+      }).join(""));
+    h += '<p style="margin:12px 0 0;font-size:12px;color:var(--ink-3)">Identity scans sit under a separate key and are released only with a reason code. Every read increments the count above and is written to the audit log with the actor and the reason. Retention is set by the group and enforced per property.</p>';
   }
 
   if(opsTab === "queue"){
@@ -593,6 +786,7 @@ function renderOps(){
 function badges(){
   document.getElementById("d-queue").hidden = S.seen.queue;
   document.getElementById("d-kitchen").hidden = S.seen.kitchen;
+  document.getElementById("d-docs").hidden = S.seen.docs;
 }
 document.querySelectorAll("[data-ops]").forEach(b=> b.addEventListener("click", ()=>{
   opsTab = b.dataset.ops;
@@ -601,22 +795,22 @@ document.querySelectorAll("[data-ops]").forEach(b=> b.addEventListener("click", 
 }));
 
 /* ================= shell ================= */
+const VIEWS = ["tv","doc","ops"];
 function show(which){
-  const tv = which === "tv";
-  document.getElementById("view-tv").hidden = !tv;
-  document.getElementById("view-ops").hidden = tv;
-  document.getElementById("tab-tv").setAttribute("aria-selected", String(tv));
-  document.getElementById("tab-ops").setAttribute("aria-selected", String(!tv));
-  if(!tv) renderOps();
+  VIEWS.forEach(v=>{
+    document.getElementById("view-"+v).hidden = v !== which;
+    document.getElementById("tab-"+v).setAttribute("aria-selected", String(v === which));
+  });
+  if(which === "ops") renderOps();
+  if(which === "doc") renderDoc();
 }
-document.getElementById("tab-tv").addEventListener("click", ()=>show("tv"));
-document.getElementById("tab-ops").addEventListener("click", ()=>show("ops"));
+VIEWS.forEach(v=> document.getElementById("tab-"+v).addEventListener("click", ()=>show(v)));
 document.getElementById("reset").addEventListener("click", ()=>{
-  S = SEED(); screen = "home"; fi = 0; cart = []; opsTab = "today";
+  S = SEED(); screen = "home"; fi = 0; cart = []; opsTab = "today"; dstep = 0; sigInk = false;
   document.querySelectorAll("[data-ops]").forEach(o=>o.setAttribute("aria-selected", String(o.dataset.ops==="today")));
-  badges(); renderTV(); renderOps(); show("tv");
+  badges(); renderTV(); renderOps(); renderDoc(); show("tv");
 });
 
-renderTV(); renderOps(); badges();
+renderTV(); renderOps(); renderDoc(); badges();
 setInterval(()=>{ if(!document.getElementById("view-ops").hidden && (opsTab==="queue"||opsTab==="today")) renderOps(); }, 15000);
 </script>
