@@ -3,8 +3,10 @@
 > **Working name.** "Orpheus Hospitality Suite" is a placeholder used consistently across
 > this document, the sales deck, and the demo. Rename in one pass when the brand is settled.
 
-**Status:** Design specification, v0.1. Nothing in this repository is implemented yet —
-this document defines what gets built and in what order.
+**Status:** Design specification, v0.2. No production code exists yet. A working prototype in
+`demo/` demonstrates the guest television, the pre-arrival capture flow and the operations
+console against shared state; where this document and that prototype disagree, this document is
+the intent and the prototype is a sketch of it.
 
 ---
 
@@ -91,6 +93,7 @@ everything" is achievable rather than aspirational.
 | Document vault | Registration cards, folios, invoices, receipts, contracts, incident reports |
 | Statutory reporting | Guest register export for local police / immigration filing |
 | Retention | Per-document-type TTL with automatic purge and a deletion audit trail |
+| Access record | A read counter and full audit entry per document, visible to the front desk |
 
 Design constraints:
 
@@ -99,7 +102,13 @@ Design constraints:
   code, and is purged on the retention clock even when the extracted fields are kept.
 - Extraction is stored as structured fields, not as an image blob to be re-read later. Downstream
   modules consume fields, never the scan.
-- Every read of a document is written to the audit log with actor, time, and reason.
+- Every read of a document is written to the audit log with actor, time, and reason, and increments
+  a visible counter on the document. A document nobody should be opening that shows a rising count
+  is the signal a compliance review is looking for.
+- **Pre-arrival capture runs on the guest's own phone as a web page, not as an app.** Nobody
+  installs software for a two-night stay, and that surface must work on iOS. It is the one
+  deliberate exception to the Android-everywhere rule in section 4. The scan is parsed on the
+  device; what reaches the platform is structured fields.
 
 ### 3.2 `crm` — Guest profile and relationship
 
@@ -166,18 +175,62 @@ than a bespoke calendar per outlet.
 
 ### 3.8 `tv` — In-room entertainment and the guest hub
 
-The television is the highest-dwell-time screen in the room and, in most hotels, the least useful.
-This module makes it the primary in-room interface.
+The television is the highest-dwell-time screen in the room and, in most hotels, the least
+useful. This module makes it the primary in-room interface.
 
-- Personalised welcome: guest name, nights remaining, folio balance, messages waiting.
-- Live TV with EPG, VOD, and the **Orpheus Nations** catalogue as the entertainment layer.
-- Casting and screen mirroring from the guest's own device, with the session cleared at checkout.
+**The decision that shapes this module: the guest television is the Orpheus client, not a
+hotel application that embeds Orpheus.** The in-room app is the same Android TV codebase that
+serves the consumer product, running in a hospitality mode, with a group of stay sections added
+to the existing navigation. It is not a fork.
+
+That has consequences worth being explicit about, because the alternative — a separate hotel app
+that calls a content API — is the obvious choice and the wrong one:
+
+- **One codebase, one release train.** A fork would need every catalogue, player, and DRM change
+  applied twice, and would drift within two releases.
+- **The guest gets the product, not an imitation of it.** Navigation, artwork, and playback are
+  identical to what they would use at home.
+- **Hospitality mode is provisioning, not a build.** The same APK, flagged at enrolment, hides the
+  account-holder controls and shows the stay group.
+
+Navigation follows the consumer product's own taxonomy, with the stay group beneath a divider:
+
+| Group | Sections |
+|---|---|
+| Entertainment | Home, Live TV, Live Radio, Movies, TV Shows, Music, Playlist |
+| Your stay | Dining, Reservations, Concierge, Hotel, My Bill |
+
+Account-holder controls — account, address book, invitations, and the whole administration group
+(user status, stream setup, stream maintenance) — are **absent in hospitality mode**. They belong
+to whoever owns the subscription, not to a guest in room 812.
+
+Guest-facing capability:
+
+- Personalised welcome: guest name, nights remaining, loyalty tier, messages waiting.
+- Live TV with EPG, live radio, on-demand film, series and music from the catalogue.
+- Casting and screen mirroring from the guest's own device.
 - Hotel information: services, dining, spa, wayfinding, events, promotions.
-- Ordering and concierge surfaced directly on the TV — this is what turns the screen from a cost
-  line into a revenue line.
-- Checkout and folio review from the remote.
-- Housekeeping-triggered room reset: on checkout the profile, cast pairings, watch history, and any
-  cached credentials are wiped before the next guest arrives.
+- Ordering, reservations and concierge on the remote — what turns the screen from a cost line
+  into a revenue line.
+- Folio review and express checkout.
+
+#### Identity and entitlement: the room is the subscriber
+
+On the consumer product the account is the person. In a hotel it cannot be — a guest will not sign
+in for two nights, and nothing they do may survive them. **The stay is the subscriber.**
+
+- Entitlement is issued to the room, bound to the stay, and expires at checkout. No guest account
+  is created and no guest credential is stored.
+- Watch history, resume points, playlist and cast pairings are scoped to the `Stay`, not to a
+  person. They are the guest's while the stay is open and are destroyed when it closes.
+- **Room reset on checkout is a hard requirement, not a feature.** Profile, pairings, history,
+  playlist and any cached credential are wiped before housekeeping releases the room. This is the
+  single most common failure in hotel TV deployments and the first thing a hotel's IT will test.
+- A guest who wants their own subscriptions uses casting. Their credentials stay on their phone
+  and never touch the room.
+- The platform therefore needs a **stay-scoped entitlement grant** from the content side: issue
+  against a room and a date range, revoke on early departure. This is not the consumer product's
+  per-account model and is an integration item, not a configuration one.
 
 ### 3.9 `voice` — In-room telephony and staff extensions
 
@@ -237,7 +290,7 @@ device in the property, guest-facing and staff-facing alike.
 
 | Surface | Device | Client |
 |---|---|---|
-| In-room television | Android TV / Google TV hospitality set | Native Android TV app (leanback UI, D-pad input) |
+| In-room television | Android TV / Google TV hospitality set | The Orpheus Android TV app in hospitality mode (D-pad input) — see 3.8 |
 | Restaurant, bar, room-service POS | Android tablet | Native Android app (touch UI) |
 | Kitchen display | Android tablet or Android-based panel | Native Android app, kiosk mode |
 | Housekeeping and maintenance | Android handheld or tablet | Native Android app |
@@ -361,7 +414,7 @@ big-bang launch.
 |---|---|---|
 | 1 | `identity` + `crm` + document vault | The guest record is the spine; nothing else is coherent without it |
 | 2 | `pay` + folio, `order` for one outlet | Proves the universal charge path on a small blast radius |
-| 3 | `tv` guest app on Android TV | Highest visible impact; needs phases 1–2 to be worth anything |
+| 3 | `tv` — hospitality mode in the existing Orpheus Android TV app | Highest visible impact; an extension of a shipped app rather than a new one, so the work is the stay group and entitlement, not a player |
 | 4 | `serve` + `resv` + `voice` | Operational depth once the guest-facing surfaces exist; voice needs `pay` in place before calls can be charged |
 | 5 | `booking` + distribution | Largest integration surface, most valuable once the rest is proven |
 | 6 | `ops` analytics, multi-property | Meaningful only once real data is flowing |
@@ -372,18 +425,24 @@ big-bang launch.
 
 Items that need a decision or an answer from outside this document before build starts.
 
-1. **Orpheus Nations integration surface.** Catalogue API, authentication model, DRM, and licensing
-   territory are all unknown here — `orpheusnations.com` was not reachable from the environment this
-   document was drafted in. The `tv` module treats the catalogue as an abstract content provider
-   until the real interface is documented.
-2. **Android television SKUs per target property.** The estate's actual models decide whether
+1. **Orpheus Nations integration surface.** The navigation taxonomy and content domains are now
+   known from the product itself — Live TV, Live Radio, Movies, TV Shows, Music and Playlist — and
+   section 3.8 is built on them. What remains unknown is everything behind the interface: the
+   catalogue API, the authentication model, DRM, and licensing territory. `orpheusnations.com` was
+   not reachable from the environment this document was drafted in, so these were read from the
+   running product rather than from documentation.
+2. **Stay-scoped entitlement.** Section 3.8 requires a grant issued against a room and a date
+   range rather than a person, revocable on early departure. Whether the content platform can issue
+   entitlement that way today is the single largest unknown in the television module, and it gates
+   phase 3. Establish it before the pilot is scoped.
+3. **Android television SKUs per target property.** The estate's actual models decide whether
    a property is a native deployment or needs an interim Android device behind the set.
-3. **PMS shape per target property.** System of record, or alongside an incumbent.
-4. **Target markets**, which determine statutory guest-register reporting, tax and receipt rules,
+4. **PMS shape per target property.** System of record, or alongside an incumbent.
+5. **Target markets**, which determine statutory guest-register reporting, tax and receipt rules,
    and the payment methods that must be supported at launch.
-5. **Payment acquirer and wallet partners**, per market.
-6. **PBX vendor and version per property**, which decides how endpoints are provisioned, how
+6. **Payment acquirer and wallet partners**, per market.
+7. **PBX vendor and version per property**, which decides how endpoints are provisioned, how
    call records are collected, and whether wake-ups and message-waiting live in the PBX or in
    the platform. Assume nothing generic here.
-7. **Emergency calling rules per market**, and whether each property's current telephony
+8. **Emergency calling rules per market**, and whether each property's current telephony
    already meets them.
