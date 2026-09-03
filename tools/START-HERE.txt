@@ -62,10 +62,14 @@ BEFORE THIS GOES TO A CLIENT
 
   Four things are deliberately marked rather than invented.
 
-  1. Orpheus Nations content. The catalogue, channel line-up
-     and licensed territories on the entertainment slide are
-     placeholders. The site was not reachable when this was
-     built.
+  1. Content sourcing and rights. Orpheus Nations owns no
+     content — it is a player over a registry of sources, with
+     a prober that only shows what it can confirm is alive.
+     A hotel putting a stream on a guest television is publicly
+     performing it commercially, so estates are provisioned
+     only against sources the property already has the right to
+     show, never against community link lists. Keep that
+     boundary in the contract.
 
   2. The commercial model. The chart is relative and
      illustrative — no client figures are in it. Rebuild it on

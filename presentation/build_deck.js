@@ -753,30 +753,33 @@ function footnote(s, text, dark) {
 /* ================================================ 19. ORPHEUS NATIONS */
 {
   const s = darkSlide();
-  slideTitle(s, "Entertainment, powered by Orpheus Nations", true, "the content layer");
-  body(s, "No property negotiates with a distributor, assembles a library, or maintains a player. The entertainment layer is licensed centrally as part of the platform and deployed identically across the estate.",
+  slideTitle(s, "A player, not a content deal", true, "the entertainment layer");
+  body(s, "Orpheus Nations owns no content and holds no library. It is a multimedia player over a source registry: sources are configured per property, and the player verifies them continuously so a guest never meets a dead channel.",
     M, 1.78, 11.0, 0.62, true, 13);
   const items = [
-    ["A curated catalogue", "On-demand entertainment presented inside your interface, not a third party's."],
-    ["Live television", "Local and international channels with a proper programme guide, over the room network."],
-    ["The guest's own services", "Casting and mirroring from their phone, so their subscriptions travel with them."],
-    ["Your channels", "Property information, dining, spa, events and promotion, alongside the entertainment."],
+    ["We are the player", "Nothing ships with content in it. No catalogue is bundled and no rights are held."],
+    ["The sources are yours", "Your existing linear feeds, your licensed on-demand provider, free ad-supported channels, and your own hotel channels."],
+    ["Smart search keeps it alive", "Every source is probed continuously for reachability. A dead endpoint is dropped before a guest can select it."],
+    ["Change sources, not systems", "Sources are dynamic and can be updated at any time without touching a single television in the estate."]
   ];
   const cw = 2.92, gx = 0.31;
   items.forEach((it, i) => {
     const x = M + i * (cw + gx);
-    card(s, x, 2.65, cw, 2.2, true);
-    badge(s, x + 0.26, 2.88, String(i + 1), true, 0.44);
-    s.addText(it[0], { isTextBox: true, x: x + 0.26, y: 3.44, w: cw - 0.52, h: 0.55, margin: 0,
+    card(s, x, 2.62, cw, 2.45, true);
+    badge(s, x + 0.26, 2.84, String(i + 1), true, 0.44);
+    s.addText(it[0], { isTextBox: true, x: x + 0.26, y: 3.4, w: cw - 0.52, h: 0.55, margin: 0,
       fontFace: SANS, fontSize: 13, bold: true, color: CREAM, lineSpacing: 17 });
-    s.addText(it[1], { isTextBox: true, x: x + 0.26, y: 4.02, w: cw - 0.52, h: 0.78, margin: 0,
+    s.addText(it[1], { isTextBox: true, x: x + 0.26, y: 3.98, w: cw - 0.52, h: 0.88, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: MUTED_D, lineSpacing: 14 });
   });
-  card(s, M, 5.05, CW, 0.85, true, "1A2438");
-  s.addText("The entertainment is why the guest picks up the remote. Everything else in this deck is why the operator is glad they did.",
-    { isTextBox: true, x: M + 0.35, y: 5.05, w: CW - 0.7, h: 0.85, margin: 0,
-      fontFace: SANS, fontSize: 13, italic: true, color: GOLD, valign: "middle" });
-  s.addNotes("PLACEHOLDER — replace these four cards with the real Orpheus Nations catalogue, channel line-up and licensed territories before this deck goes to a client. Content specifics were not available when the deck was drafted.");
+  card(s, M, 5.28, CW, 1.05, true, "1A2438");
+  s.addText("Where the rights sit", { isTextBox: true, x: M + 0.35, y: 5.44, w: 3.4, h: 0.28, margin: 0,
+    fontFace: SANS, fontSize: 12, bold: true, color: GOLD });
+  s.addText("The property or the group supplies its sources and holds the right to show them. We supply the player, the interface and the verification. Put that boundary in the contract — a hotel is publicly performing whatever it puts on a guest television, and licensing that is the property's obligation.",
+    { isTextBox: true, x: M + 0.35, y: 5.74, w: CW - 0.7, h: 0.5, margin: 0,
+      fontFace: SANS, fontSize: 11, color: CREAM, lineSpacing: 14.5 });
+  footnote(s, "Community-maintained link lists are not a licensed source for commercial redistribution. Hospitality estates are provisioned against the property's own licensed feeds.", true);
+  s.addNotes("Say this slide plainly; it is the one a hotel's legal team will test. We are a player and a verification service, not a content supplier — the property brings sources it already has the right to show, which is usually its existing linear contract plus free ad-supported channels. That is an easier sale than it sounds: the group keeps its content deals and gets a better player, rather than being asked to switch supplier. Never imply the platform brings a licensed library, and never let a community link list near a hospitality deployment — a hotel showing an unlicensed stream is publicly performing it commercially, and that is the property's liability and the fastest way to lose the account.");
 }
 
 /* ================================================ 19b. VOICE */

@@ -186,8 +186,8 @@ to the existing navigation. It is not a fork.
 That has consequences worth being explicit about, because the alternative — a separate hotel app
 that calls a content API — is the obvious choice and the wrong one:
 
-- **One codebase, one release train.** A fork would need every catalogue, player, and DRM change
-  applied twice, and would drift within two releases.
+- **One codebase, one release train.** A fork would need every player, source-handling and
+  interface change applied twice, and would drift within two releases.
 - **The guest gets the product, not an imitation of it.** Navigation, artwork, and playback are
   identical to what they would use at home.
 - **Hospitality mode is provisioning, not a build.** The same APK, flagged at enrolment, hides the
@@ -207,12 +207,51 @@ to whoever owns the subscription, not to a guest in room 812.
 Guest-facing capability:
 
 - Personalised welcome: guest name, nights remaining, loyalty tier, messages waiting.
-- Live TV with EPG, live radio, on-demand film, series and music from the catalogue.
+- Live TV with guide data, live radio, on-demand film, series and music — from the sources the
+  property has registered, not from a bundled library. See *Content sourcing* below.
 - Casting and screen mirroring from the guest's own device.
 - Hotel information: services, dining, spa, wayfinding, events, promotions.
 - Ordering, reservations and concierge on the remote — what turns the screen from a cost line
   into a revenue line.
 - Folio review and express checkout.
+
+#### Content sourcing: a player, not a library
+
+**Orpheus Nations owns no content and holds no catalogue.** It is a multimedia player over a
+source registry. Getting this right in the document matters, because the obvious reading — that
+the platform brings a licensed library with it — is wrong and would be a misrepresentation to a
+hotel.
+
+- **Sources** are playlists and service endpoints: M3U/M3U8, Xtream-style services, and XMLTV
+  guide data. They are registered per property, not compiled into the application.
+- **Sources are dynamic by design.** They are expected to change, and can be updated at any time
+  without redeploying anything to a single television in the estate.
+- **Smart search is a liveness and accuracy prober.** Every registered endpoint is checked
+  continuously — is it reachable, does it serve what its metadata claims, does it still play —
+  and the result gates what the interface offers.
+- **Only live sources are surfaced.** A dead or misdescribed endpoint is withheld from the guest
+  interface rather than shown and failing on selection. On a hotel television a channel that does
+  not play is a call to the front desk, so this is an operational feature, not a cosmetic one.
+- Nothing is stored, hosted or transcoded by the platform. The player resolves and plays.
+
+**Where the rights sit, and why hospitality differs from consumer use.**
+
+A consumer pointing a player at their own sources is playing content to themselves. A hotel
+putting a stream on a guest television is **publicly performing it commercially**, which requires
+the right to do so. The architecture therefore treats the source registry as property-supplied
+and property-licensed:
+
+- A hospitality deployment is provisioned only against sources the property or group already has
+  the right to show: its existing linear feeds, its licensed on-demand provider, free
+  ad-supported channels offered for redistribution, and its own hotel channels.
+- **Community-maintained link lists are not a licensed source for commercial redistribution.**
+  The public repository and forum lists a consumer install might use must not be provisioned into
+  a hospitality estate. This is a hard constraint on the product, not a deployment preference.
+- Source provenance is recorded per entry, so a property can evidence what it is showing and on
+  whose authority. Treat it as an audit requirement.
+
+This boundary is also the easier sale. The group keeps the content contracts it already has and
+gets a better player over them, rather than being asked to change supplier.
 
 #### Identity and entitlement: the room is the subscriber
 
@@ -228,9 +267,11 @@ in for two nights, and nothing they do may survive them. **The stay is the subsc
   single most common failure in hotel TV deployments and the first thing a hotel's IT will test.
 - A guest who wants their own subscriptions uses casting. Their credentials stay on their phone
   and never touch the room.
-- The platform therefore needs a **stay-scoped entitlement grant** from the content side: issue
-  against a room and a date range, revoke on early departure. This is not the consumer product's
-  per-account model and is an integration item, not a configuration one.
+- Because the platform holds no catalogue and no subscriber accounts, entitlement is internal and
+  simple: a room is bound to the property's registered source set while its stay is open, and
+  unbound at checkout. There is no external rights-holder to grant or revoke against, which
+  removes a class of integration risk the alternative — reselling someone's licensed library —
+  would have carried.
 
 ### 3.9 `voice` — In-room telephony and staff extensions
 
@@ -425,16 +466,16 @@ big-bang launch.
 
 Items that need a decision or an answer from outside this document before build starts.
 
-1. **Orpheus Nations integration surface.** The navigation taxonomy and content domains are now
-   known from the product itself — Live TV, Live Radio, Movies, TV Shows, Music and Playlist — and
-   section 3.8 is built on them. What remains unknown is everything behind the interface: the
-   catalogue API, the authentication model, DRM, and licensing territory. `orpheusnations.com` was
-   not reachable from the environment this document was drafted in, so these were read from the
-   running product rather than from documentation.
-2. **Stay-scoped entitlement.** Section 3.8 requires a grant issued against a room and a date
-   range rather than a person, revocable on early departure. Whether the content platform can issue
-   entitlement that way today is the single largest unknown in the television module, and it gates
-   phase 3. Establish it before the pilot is scoped.
+1. **Source provisioning per property.** There is no catalogue to license — the platform is a
+   player over a registry, per section 3.8. What each property is entitled to show, and who
+   supplies and licenses those sources, is a per-deal question and the first thing to settle in
+   the television module. A group with an existing linear contract is straightforward; a property
+   with nothing needs a content conversation before a technical one.
+2. **Source health at hospitality standard.** Smart search already gates dead endpoints. What is
+   not yet established is the standard a hotel will hold it to — how quickly a failure is
+   detected, what the guest sees in the gap, and whether a property will accept a channel list
+   that can change beneath it. Agree the target before the pilot, because "the channel was there
+   yesterday" is a front-desk problem, not a technical one.
 3. **Android television SKUs per target property.** The estate's actual models decide whether
    a property is a native deployment or needs an interim Android device behind the set.
 4. **PMS shape per target property.** System of record, or alongside an incumbent.

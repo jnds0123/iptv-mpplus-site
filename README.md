@@ -83,10 +83,13 @@ demonstrable in about fifteen seconds.
 Four things in these materials are deliberately marked rather than invented, and need
 real input:
 
-1. **Orpheus Nations content.** `orpheusnations.com` was not reachable from the
-   environment these materials were built in, so the catalogue, channel line-up and
-   licensed territories are placeholders. Slide 19 and the prototype's `CATALOGUE`
-   array both need the real thing.
+1. **Content sourcing and rights.** Orpheus Nations owns no content — it is a
+   multimedia player over a registry of sources, with a liveness prober that only
+   surfaces endpoints it can confirm are alive. For hospitality this matters more
+   than it does for consumer use: a hotel putting a stream on a guest television is
+   publicly performing it commercially. Estates must be provisioned only against
+   sources the property already has the right to show, never against community link
+   lists. Slide 19 and section 3.8 both state this boundary; keep it in any contract.
 2. **The commercial model** (slide 21) is a relative, illustrative model with no client
    figures in it. Rebuild it on the group's own outlet revenue, vendor spend, payroll
    and capex plan.
