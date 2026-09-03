@@ -16,6 +16,11 @@ const PAPER_LINE = "DFE5EE";
 const MUTED_D    = "9AA9C2";
 const MUTED_L    = "5A6880";
 
+// the product's own palette — used only inside screen mockups, so a slide shows the real interface
+const O_BG = "0A0613", O_RAIL = "120C22", O_LINE = "241A3D", O_ACTIVE = "231640";
+const O_PURPLE = "B06BFF", O_MAGENTA = "F05CE0", O_FOCUS = "C77BFF";
+const O_MUTE = "9C93B8", O_NAV = "A79CC4", O_PINK = "EC4899";
+
 const SERIF = "Cambria";
 const SANS  = "Calibri";
 
@@ -573,47 +578,104 @@ function footnote(s, text, dark) {
 {
   const s = darkSlide();
   slideTitle(s, "From a television into the hotel itself", true, "the guest hub");
-  s.addShape(pres.ShapeType.roundRect, { x: M, y: 1.85, w: 7.1, h: 4.0, rectRadius: 0.1,
-    fill: { color: "05090F" }, line: { color: INK_LINE, width: 2 }, shadow: darkShadow() });
-  s.addText("Good evening, Ms Reyes", { isTextBox: true, x: M + 0.35, y: 2.12, w: 5.0, h: 0.4, margin: 0,
-    fontFace: SERIF, fontSize: 21, bold: true, color: CREAM });
-  s.addText("Room 812  ·  2 nights remaining  ·  Gold member", { isTextBox: true, x: M + 0.35, y: 2.55, w: 5.4, h: 0.3, margin: 0,
-    fontFace: SANS, fontSize: 11, color: MUTED_D });
-  s.addShape(pres.ShapeType.roundRect, { x: M + 5.55, y: 2.14, w: 1.2, h: 0.4, rectRadius: 0.2,
-    fill: { color: GOLD }, line: { color: GOLD, width: 1 } });
-  s.addText("2 messages", { isTextBox: true, x: M + 5.55, y: 2.14, w: 1.2, h: 0.4, margin: 0,
-    fontFace: SANS, fontSize: 9.5, bold: true, color: INK, align: "center", valign: "middle" });
 
-  const tiles = [["Watch", "Live TV, films and series"], ["Order", "Dining, in-room, bar"],
-                 ["Book", "Spa, tables, tours"], ["Ask", "Concierge and housekeeping"],
-                 ["Hotel", "Services and wayfinding"], ["Bill", "Folio and express checkout"]];
-  const tw = 2.08, tgx = 0.16, th = 1.15;
-  tiles.forEach((t, i) => {
-    const col = i % 3, row = Math.floor(i / 3);
-    const x = M + 0.35 + col * (tw + tgx), y = 3.0 + row * (th + 0.18);
-    s.addShape(pres.ShapeType.roundRect, { x, y, w: tw, h: th, rectRadius: 0.08,
-      fill: { color: i === 0 ? "1E2E4A" : "121C2E" },
-      line: { color: i === 0 ? GOLD : "1E2A40", width: i === 0 ? 1.5 : 1 } });
-    s.addText(t[0], { isTextBox: true, x: x + 0.2, y: y + 0.24, w: tw - 0.4, h: 0.32, margin: 0,
-      fontFace: SANS, fontSize: 15, bold: true, color: i === 0 ? GOLD : CREAM });
-    s.addText(t[1], { isTextBox: true, x: x + 0.2, y: y + 0.6, w: tw - 0.4, h: 0.42, margin: 0,
-      fontFace: SANS, fontSize: 9.5, color: MUTED_D, lineSpacing: 12 });
+  /* ---- the actual Orpheus interface, drawn in the product's own colours ---- */
+  const FX = M, FY = 1.85, FW = 7.1, FH = 4.0;              // screen frame
+  s.addShape(pres.ShapeType.roundRect, { x: FX, y: FY, w: FW, h: FH, rectRadius: 0.09,
+    fill: { color: O_BG }, line: { color: INK_LINE, width: 2 }, shadow: darkShadow() });
+
+  // left rail
+  s.addShape(pres.ShapeType.roundRect, { x: FX + 0.02, y: FY + 0.02, w: 1.5, h: FH - 0.04, rectRadius: 0.08,
+    fill: { color: O_RAIL }, line: { color: O_LINE, width: 1 } });
+  s.addShape(pres.ShapeType.ellipse, { x: FX + 0.16, y: FY + 0.17, w: 0.2, h: 0.2,
+    fill: { color: "3A2560" }, line: { color: "553A8A", width: 1 } });
+  s.addText([{ text: "Orph", options: { color: O_PURPLE } }, { text: "eus", options: { color: O_MAGENTA } }],
+    { isTextBox: true, x: FX + 0.42, y: FY + 0.13, w: 1.0, h: 0.28, margin: 0,
+      fontFace: SANS, fontSize: 11, bold: true });
+
+  const rnav = ["Home", "Live TV", "Movies", "TV Shows", "Music"];
+  rnav.forEach((n, i) => {
+    const y = FY + 0.61 + i * 0.30;
+    if (i === 0) s.addShape(pres.ShapeType.roundRect, { x: FX + 0.14, y, w: 1.26, h: 0.26, rectRadius: 0.05,
+      fill: { color: O_ACTIVE }, line: { color: O_ACTIVE, width: 1 } });
+    s.addText(n, { isTextBox: true, x: FX + 0.24, y, w: 1.16, h: 0.26, margin: 0,
+      fontFace: SANS, fontSize: 8, bold: true, color: i === 0 ? CREAM : O_NAV, valign: "middle" });
+  });
+  s.addShape(pres.ShapeType.line, { x: FX + 0.16, y: FY + 2.14, w: 1.22, h: 0, line: { color: O_LINE, width: 1 } });
+  s.addText("YOUR STAY", { isTextBox: true, x: FX + 0.16, y: FY + 2.21, w: 1.2, h: 0.16, margin: 0,
+    fontFace: SANS, fontSize: 5.5, bold: true, charSpacing: 1.2, color: "6B6088" });
+  ["Dining", "Concierge", "My Bill"].forEach((n, i) => {
+    s.addText(n, { isTextBox: true, x: FX + 0.24, y: FY + 2.45 + i * 0.30, w: 1.16, h: 0.26, margin: 0,
+      fontFace: SANS, fontSize: 8, bold: true, color: O_NAV, valign: "middle" });
   });
 
+  // content pane
+  const CX = FX + 1.65;
+  s.addText("Good evening, Ms Reyes", { isTextBox: true, x: CX, y: FY + 0.13, w: 3.4, h: 0.3, margin: 0,
+    fontFace: SERIF, fontSize: 14, bold: true, color: CREAM });
+  s.addText("2 nights remaining  ·  Gold member", { isTextBox: true, x: CX, y: FY + 0.43, w: 3.4, h: 0.2, margin: 0,
+    fontFace: SANS, fontSize: 7.5, color: O_MUTE });
+  s.addShape(pres.ShapeType.roundRect, { x: FX + 5.75, y: FY + 0.13, w: 1.25, h: 0.26, rectRadius: 0.13,
+    fill: { color: "1A1130" }, line: { color: "2E2150", width: 1 } });
+  s.addText("Room 812 · Gold", { isTextBox: true, x: FX + 5.75, y: FY + 0.13, w: 1.25, h: 0.26, margin: 0,
+    fontFace: SANS, fontSize: 6.5, color: "CFC4EA", align: "center", valign: "middle" });
+
+  // featured card
+  s.addShape(pres.ShapeType.roundRect, { x: CX, y: FY + 0.77, w: 5.35, h: 1.12, rectRadius: 0.07,
+    fill: { color: "2A1A4A" }, line: { color: "3A2463", width: 1 } });
+  s.addShape(pres.ShapeType.roundRect, { x: CX + 0.12, y: FY + 0.87, w: 0.6, h: 0.92, rectRadius: 0.04,
+    fill: { color: "8E5A6B" }, line: { color: "8E5A6B", width: 1 } });
+  s.addText("FEATURED", { isTextBox: true, x: CX + 0.83, y: FY + 0.89, w: 1.4, h: 0.15, margin: 0,
+    fontFace: SANS, fontSize: 5.5, bold: true, charSpacing: 1, color: O_FOCUS });
+  s.addText("Office Romance", { isTextBox: true, x: CX + 0.83, y: FY + 1.04, w: 3.0, h: 0.26, margin: 0,
+    fontFace: SANS, fontSize: 12.5, bold: true, color: CREAM });
+  s.addText("2026  ·  Movies  ·  ★ R", { isTextBox: true, x: CX + 0.83, y: FY + 1.30, w: 2.4, h: 0.16, margin: 0,
+    fontFace: SANS, fontSize: 6.5, color: O_MUTE });
+  s.addShape(pres.ShapeType.roundRect, { x: CX + 0.83, y: FY + 1.51, w: 0.98, h: 0.22, rectRadius: 0.04,
+    fill: { color: "B94AE8" }, line: { color: "B94AE8", width: 1 } });
+  s.addText("▶  Watch now", { isTextBox: true, x: CX + 0.83, y: FY + 1.51, w: 0.98, h: 0.22, margin: 0,
+    fontFace: SANS, fontSize: 6.5, bold: true, color: "FFFFFF", align: "center", valign: "middle" });
+
+  // carousel
+  s.addText("LAST ADDED MOVIES", { isTextBox: true, x: CX, y: FY + 2.05, w: 2.2, h: 0.18, margin: 0,
+    fontFace: SANS, fontSize: 6.5, bold: true, charSpacing: 1.2, color: O_FOCUS });
+  s.addText("See all →", { isTextBox: true, x: FX + 6.2, y: FY + 2.05, w: 0.8, h: 0.18, margin: 0,
+    fontFace: SANS, fontSize: 6, color: O_MUTE, align: "right" });
+
+  const art = [["On the Hunt", "8A3B22"], ["One Mile I", "3A4A5C"], ["One Mile II", "4A4438"],
+               ["Mercy", "6B2230"], ["Mexicali", "8A6A2A"]];
+  art.forEach((a, i) => {
+    const x = CX + i * 1.06;
+    s.addShape(pres.ShapeType.roundRect, { x, y: FY + 2.29, w: 0.94, h: 0.98, rectRadius: 0.05,
+      fill: { color: a[1] }, line: { color: i === 0 ? O_FOCUS : "2A1C47", width: i === 0 ? 1.5 : 1 } });
+    if (i === 0) {
+      s.addShape(pres.ShapeType.ellipse, { x: x + 0.32, y: FY + 2.63, w: 0.3, h: 0.3,
+        fill: { color: "FFFFFF" }, line: { color: "FFFFFF", width: 1 } });
+      s.addText("▶", { isTextBox: true, x: x + 0.32, y: FY + 2.63, w: 0.3, h: 0.3, margin: 0,
+        fontFace: SANS, fontSize: 9, color: "1A0F2E", align: "center", valign: "middle" });
+    }
+    s.addText([{ text: "▶ ", options: { color: O_PINK, fontSize: 5 } },
+               { text: a[0], options: { color: CREAM, fontSize: 6 } }],
+      { isTextBox: true, x, y: FY + 3.32, w: 0.98, h: 0.16, margin: 0, fontFace: SANS, bold: true });
+    s.addText("2026", { isTextBox: true, x, y: FY + 3.48, w: 0.94, h: 0.14, margin: 0,
+      fontFace: SANS, fontSize: 5.5, color: O_MUTE });
+  });
+
+  /* ---- right column ---- */
   const pts = [
-    ["Personal on arrival", "Name, nights remaining and loyalty tier — drawn from the same record the front desk reads."],
-    ["Identical in every property", "One Android application, one interface, one brand standard, on every set in the estate."],
+    ["It is the Orpheus product", "The same application your subscribers use at home, running in a hospitality mode — not a hotel imitation of it."],
+    ["Personal on arrival", "Name, nights remaining and loyalty tier, drawn from the same record the front desk reads."],
     ["Revenue, not just cost", "The remote reaches room service, the spa and the bar. The screen begins to earn."],
-    ["Reset between guests", "Profile, cast pairings, history and cached logins cleared automatically on turnover."],
+    ["The stay is the subscriber", "Entitlement is issued to the room for the dates of the stay. Profile, history and pairings are wiped at checkout."],
   ];
   pts.forEach((p, i) => {
     const y = 1.9 + i * 1.02;
     s.addText(p[0], { isTextBox: true, x: M + 7.5, y, w: 4.55, h: 0.28, margin: 0,
       fontFace: SANS, fontSize: 13, bold: true, color: GOLD });
-    s.addText(p[1], { isTextBox: true, x: M + 7.5, y: y + 0.3, w: 4.6, h: 0.68, margin: 0,
+    s.addText(p[1], { isTextBox: true, x: M + 7.5, y: y + 0.3, w: 4.6, h: 0.72, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: MUTED_D, lineSpacing: 14 });
   });
-  s.addNotes("Volunteer the checkout reset before IT asks — every group has been burned by a guest finding the previous occupant's signed-in streaming account.");
+  s.addNotes("The screen on this slide is the real interface, not an illustration — the same rail, featured card and rows a subscriber sees at home. That is the point: the hotel is not commissioning a bespoke TV system, it is switching on a hospitality mode in a product that already ships. Volunteer the checkout wipe before IT asks; every group has been burned by a guest finding the previous occupant's signed-in streaming account.");
 }
 
 /* ================================================ 17. NO SET-TOP BOX */
