@@ -78,6 +78,20 @@ apply to both) supplies a Samsung/Tizen app:</p>
       subscription works in either app.</li>
 </ul>
 
+<h2>If your provider requires a VPN</h2>
+<p>Samsung Tizen TVs have <strong>no built-in VPN client</strong>, so for a VPN-only portal the
+VPN must run elsewhere in the path:</p>
+<ul>
+  <li><strong>Router-level VPN (best for the TV):</strong> configure the VPN on your router (or a
+      small travel router in front of the TV) so everything the TV does goes through the tunnel.</li>
+  <li><strong>Android TV box:</strong> if you use IPTV MP+ on an Android TV / Google TV device,
+      install the VPN app there — Android supports VPNs natively, per-device.</li>
+  <li><strong>Portal access from a computer:</strong> to manage your account or activate a device,
+      connect the VPN on your PC/phone first, then open the provider portal in a browser.</li>
+</ul>
+<p>Note: the developer-mode sideload in Steps 1–3 happens entirely on your local network
+(<code>10.0.4.209</code> ↔ TV), so it works with or without the VPN connected.</p>
+
 <h2>Troubleshooting</h2>
 <ul>
   <li><strong>12345 does nothing:</strong> make sure the Apps panel itself is focused (not a search
