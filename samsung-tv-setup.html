@@ -20,31 +20,36 @@
 </head>
 <body>
 <h1>Samsung Smart TV Setup Guide</h1>
-<p><em>Developer-mode host IP for this setup: <strong>10.0.4.209</strong></em></p>
+<p><em>Samsung TV IP address for this setup: <strong>10.0.4.209</strong></em></p>
 
 <p class="callout"><strong>Important:</strong> Samsung Smart TVs run <strong>Tizen OS</strong>, not
 Android. IPTV Multimedia Player Plus (IPTV MP+) is an Android app, so it cannot be installed
 directly on a Samsung TV. See the options below for using IPTV MP+ with a Samsung TV, and for
 loading provider apps (such as one from your IPTV provider) onto the TV itself.</p>
 
-<h2>Step 1 — Enable Developer Mode and set the host IP</h2>
-<p>This unlocks the TV so apps can be pushed to it from a computer on your network
-(the machine at <code>10.0.4.209</code>).</p>
+<h2>Step 1 — Enable Developer Mode</h2>
+<p>The TV is at <code>10.0.4.209</code>. Developer mode unlocks it so apps can be pushed to it
+from a computer on the same network.</p>
 <ol>
-  <li>Press <kbd>Home</kbd> on the remote and open the <strong>Apps</strong> panel.</li>
+  <li>On the computer you'll install from, find its IP address
+      (Windows: <code>ipconfig</code>, Mac/Linux: <code>ifconfig</code> — it should be another
+      10.0.4.x address).</li>
+  <li>On the TV, press <kbd>Home</kbd> on the remote and open the <strong>Apps</strong> panel.</li>
   <li>With the Apps panel open, press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> <kbd>5</kbd>
       on the remote's number pad. A <strong>Developer mode</strong> dialog appears.
       (On some models it's under Apps → Settings gear → typing 12345.)</li>
   <li>Switch Developer mode <strong>On</strong>.</li>
-  <li>When asked for the <strong>Host PC IP</strong>, enter <code>10.0.4.209</code> and confirm.</li>
+  <li>When asked for the <strong>Host PC IP</strong>, enter <strong>your computer's IP</strong>
+      from step 1 (not the TV's own address) and confirm.</li>
   <li>Turn the TV fully off and back on (unplug for ~30 seconds if needed).
       "Developer mode" should now show at the top of the Apps panel.</li>
 </ol>
 
-<h2>Step 2 — Find your TV's IP address</h2>
-<p>You'll need it to connect from the computer:</p>
-<p><strong>Settings → General → Network → Network Status → IP Settings</strong> — note the TV's IP
-(it will be another 10.0.4.x address on your network).</p>
+<h2>Step 2 — Confirm the TV's IP address</h2>
+<p><strong>Settings → General → Network → Network Status → IP Settings</strong> — confirm the TV
+shows <code>10.0.4.209</code>. This screen also shows the TV's <strong>MAC address</strong>, which
+IPTV portals use to register the device. If the TV's IP changes over time, set a static IP here or
+reserve 10.0.4.209 for it in your router's DHCP settings.</p>
 
 <h2>Step 3 — Install a provider app on the TV</h2>
 <p>If your IPTV provider (for example, orpheusnations.com or orpheuspinoy.com — the same steps
@@ -52,14 +57,15 @@ apply to both) supplies a Samsung/Tizen app:</p>
 <ul>
   <li><strong>If it's in the Samsung App Store:</strong> Home → Apps → Search, type the app name,
       and install it — no developer mode needed. Ask the provider for the exact app name.</li>
-  <li><strong>If it's a <code>.wgt</code> file (Tizen widget):</strong> on the computer at
-      <code>10.0.4.209</code>, install <a href="https://developer.tizen.org/development/tizen-studio/download">Tizen Studio</a>
+  <li><strong>If it's a <code>.wgt</code> file (Tizen widget):</strong> on your computer, install
+      <a href="https://developer.tizen.org/development/tizen-studio/download">Tizen Studio</a>
       (or just its CLI tools), then run:
       <ol>
-        <li><code>sdb connect &lt;TV-IP-from-Step-2&gt;</code> — accept the permission prompt on the TV.</li>
+        <li><code>sdb connect 10.0.4.209</code> — accept the permission prompt on the TV.</li>
         <li><code>tizen install -n YourProviderApp.wgt -t &lt;device-name&gt;</code></li>
       </ol>
-      The app then appears in the TV's Apps panel.</li>
+      The app then appears in the TV's Apps panel. For additional TVs, repeat with each TV's own
+      IP address (each TV also needs Developer mode enabled per Step 1).</li>
   <li><strong>If the provider gives you a "server IP" or portal URL instead:</strong> that goes
       inside an IPTV player app (as an Xtream Codes login or M3U playlist URL) — you don't need
       developer mode for that, just a player app from the Samsung App Store.</li>
@@ -90,15 +96,16 @@ VPN must run elsewhere in the path:</p>
       connect the VPN on your PC/phone first, then open the provider portal in a browser.</li>
 </ul>
 <p>Note: the developer-mode sideload in Steps 1–3 happens entirely on your local network
-(<code>10.0.4.209</code> ↔ TV), so it works with or without the VPN connected.</p>
+(your computer ↔ the TV at <code>10.0.4.209</code>), so it works with or without the VPN
+connected.</p>
 
 <h2>Troubleshooting</h2>
 <ul>
   <li><strong>12345 does nothing:</strong> make sure the Apps panel itself is focused (not a search
       box), and try the on-screen number pad on remotes without number keys.</li>
-  <li><strong>TV not found by <code>sdb connect</code>:</strong> confirm the TV and the computer at
-      <code>10.0.4.209</code> are on the same network/VLAN, and that the host IP entered in
-      Developer mode exactly matches the computer's current IP.</li>
+  <li><strong>TV not found by <code>sdb connect 10.0.4.209</code>:</strong> confirm the TV and
+      your computer are on the same network/VLAN (try <code>ping 10.0.4.209</code> first), and
+      that the Host PC IP entered in Developer mode exactly matches the computer's current IP.</li>
   <li><strong>Sideloaded app disappears:</strong> developer-mode installs can be removed by TV
       firmware updates; reinstall with the same steps.</li>
   <li><strong>Checking whether the provider "sees" your TV:</strong> log in to your provider's
